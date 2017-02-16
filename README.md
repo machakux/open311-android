@@ -1,2 +1,2 @@
 # android-app
-Android Application For Reporting Civilian Issue To Agency
+Android Application For Reporting Civic Issue To Agencies
