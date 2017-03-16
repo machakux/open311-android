@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Citizen Feedback</string>
+    <string name="title_item_detail">Item Detail</string>
+    <string name="et_phone_number">Enter phone number</string>
+    <string name="action_next">Next</string>
+    <string name="action_create_account">Save And Continue</string>
+    <string name="text_user_name">Enter your full name</string>
+    <string name="text_id_title">CIVILIAN IDENTITY</string>
+    <string name="text_id_desc">Let the agency recognize you, maybe keep in touch!</string>
+    <string name="text_zipCode">Zip code</string>
+    <string name="action_startReport">Select Category</string>
+    <string name="enpoint_url">http://10.42.0.1:3000</string>
+    <string name="txt_loading">Loading&#8230;</string>
+    <string name="msg_server_error">Error loading data from the server</string>
+    <string name="action_reload">Try Again</string>
+
+    <string-array name="duration_names">
+        <item>TODAY</item>
+        <item>YESTERDAY</item>
+        <item>THIS WEEK</item>
+        <item>THIS MONTH</item>
+        <item>OLD ISSUES</item>
+    </string-array>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <!-- Default error message is "Error loading data from the server" -->
+    <!-- Default icon is no Internet connection -->
+    <TextView
+        android:id="@+id/tv_ErrorMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/msg_server_error"
+        android:textAlignment="center"
+        android:drawablePadding="8dp"
+        android:drawableTop="@drawable/ic_cloud_off_48x48" />
+
+    <!-- The retry again button allows user to refresh the page -->
+    <Button
+        android:id="@+id/btn_Reload"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="@color/colorAccent"
+        android:text="@string/action_reload"/>
+
+</LinearLayout>
