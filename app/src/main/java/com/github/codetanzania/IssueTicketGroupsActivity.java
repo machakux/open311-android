@@ -88,18 +88,18 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.issues, menu);
-        mSwitchCompat = menu.findItem(R.id.item_toggle_pending);
-        final SwitchCompat switchCompat = (SwitchCompat) mSearchMenuItem.getActionView();
-        mSearchMenuItem = menu.findItem(R.id.item_search);
-        mUserProfileMenuItem = menu.findItem(R.id.item_user_acc);
-        // default -- show resolved issues
-        switchCompat.setChecked(true);
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-            }
-        });
+//        mSwitchCompat = menu.findItem(R.id.item_toggle_pending);
+//        final SwitchCompat switchCompat = (SwitchCompat) mSearchMenuItem.getActionView();
+//        mSearchMenuItem = menu.findItem(R.id.item_search);
+//        mUserProfileMenuItem = menu.findItem(R.id.item_user_acc);
+//        // default -- show resolved issues
+//        switchCompat.setChecked(true);
+//        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//
+//            }
+//        });
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -115,8 +115,8 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
 
     /* show or hide menu items */
     private void showMenuItems(boolean show) {
-        mSearchMenuItem.setVisible(show);
-        mSwitchCompat.setVisible(show);
+//        mSearchMenuItem.setVisible(show);
+//        mSwitchCompat.setVisible(show);
         // mUserProfileMenuItem.setVisible(show);
     }
 
@@ -134,11 +134,16 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
                 .disallowAddToBackStack()
                 .commitAllowingStateLoss();
 
+        String token = Util.getAuthToken(this);
+        String userId = Util.getCurrentUserId(this);
+
+        assert token != null && userId != null;
+
         // load data from the server
         try {
             Open311Api.ServiceBuilder api = new Open311Api.ServiceBuilder(this);
             api.build(Open311Api.ServiceRequestEndpoint.class)
-                .getByUserId().enqueue(this);
+                .getByUserId(userId, String.format("Bearer %s", token)).enqueue(this);
 
         } catch (Exception e) {
             Log.e(TAG, "An error was " + e.getMessage());

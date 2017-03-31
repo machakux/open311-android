@@ -31,9 +31,6 @@ public class IDFragment extends Fragment {
     /* Used by The Logcat */
     private static final String TAG = "IDFragment";
 
-    /* Permission Code to read Accounts */
-    private static final int ACCOUNTS_PERMISSION_CODE = 0;
-
     /* fragment lifecycle callback. create fragment's view */
     @Override
     public View onCreateView(
@@ -44,6 +41,8 @@ public class IDFragment extends Fragment {
     /* fragment lifecycle callback. attach events */
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+        view.findViewById(R.id.til_Email).setVisibility(View.GONE);
+        view.findViewById(R.id.ll_UserAccount).setVisibility(View.GONE);
         final EditText etUserName = (EditText) view.findViewById(R.id.et_userName);
         final EditText etPhone = (EditText) view.findViewById(R.id.et_phoneNumber);
         view.findViewById(R.id.btn_Next).setOnClickListener(new View.OnClickListener() {
@@ -75,30 +74,6 @@ public class IDFragment extends Fragment {
         });
     }
 
-    /* invoked when the activity has been created */
-    @Override public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        requestPermissions(new String[]{ Manifest.permission.GET_ACCOUNTS }, ACCOUNTS_PERMISSION_CODE);
-    }
-
-    // when request to operate is denied or granted.
-    @Override
-    public void onRequestPermissionsResult(
-            int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == ACCOUNTS_PERMISSION_CODE) {
-            // scan permission
-            for (int i = 0; i < permissions.length; i++) {
-                String permission = permissions[i]; int result = grantResults[i];
-                if (permission == Manifest.permission.GET_ACCOUNTS && result == PackageManager.PERMISSION_GRANTED) {
-                    // handle permission
-                    loadAccounts();
-                } else {
-                    // handle rejection
-                }
-            }
-        }
-    }
 
     private void loadAccounts() {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED) {

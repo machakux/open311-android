@@ -9,7 +9,7 @@
     <string name="text_id_desc">Let the agency recognize you, maybe keep in touch!</string>
     <string name="text_zipCode">Zip code</string>
     <string name="action_startReport">Select Category</string>
-    <string name="enpoint_url">http://10.42.0.1:3000</string>
+    <string name="enpoint_url">https://dawasco.herokuapp.com</string>
     <string name="txt_loading">&#8230;</string>
     <string name="msg_server_error">Error loading data from the server</string>
     <string name="action_reload">Try Again</string>
@@ -32,6 +32,11 @@
     <string name="default_zip_code">255</string>
     <string name="text_signing_up">Signing Up</string>
     <string name="text_StatusText">Please wait while we\'re creating your account</string>
+    <string name="et_account_number">DAWASCO account number</string>
+    <string name="et_meter_number">DAWASCO meter number</string>
+    <string name="action_save_profile">Update</string>
+    <string name="text_empty_name">Not provided</string>
+    <string name="text_empty_account">Not provided</string>
 
     <string-array name="duration_names">
         <item>Today</item>

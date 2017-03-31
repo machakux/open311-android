@@ -12,5 +12,7 @@ public class AppConfig {
         public static final String REPORTER_EMAIL   = "reporter.email";
         public static final String REPORTER_PHONE   = "reporter.phone";
         public static final String REPORTER_DAWASCO_ACCOUNT = "reporter.dawasco.account";
+        public static final String AUTH_TOKEN = "auth.token";
+        public static final String CURRENT_USER_ID = "user.id";
     }
 }

@@ -7,6 +7,17 @@ import android.util.Log;
 
 import com.github.codetanzania.model.Jurisdiction;
 import com.github.codetanzania.model.Reporter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.StringReader;
 
 public class Util {
 
@@ -86,6 +97,40 @@ public class Util {
                 .putString(AppConfig.Const.REPORTER_EMAIL, reporter.email)
                 .putString(AppConfig.Const.REPORTER_DAWASCO_ACCOUNT, reporter.account)
                 .apply();
+    }
+
+    public static void storeAuthToken(Context mContext, String mToken) {
+        SharedPreferences sharedPrefs = mContext.getSharedPreferences(AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+            sharedPrefs.edit()
+                    .putString(AppConfig.Const.AUTH_TOKEN, mToken)
+                    .apply();
+    }
+
+    public static String getCurrentUserId(Context mContext) {
+        SharedPreferences mPrefs = mContext.getSharedPreferences(AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+        return mPrefs.getString(AppConfig.Const.CURRENT_USER_ID, null);
+    }
+
+    public static String getAuthToken(Context mContext) {
+        SharedPreferences mPrefs = mContext.getSharedPreferences(AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+        return mPrefs.getString(AppConfig.Const.AUTH_TOKEN, null);
+    }
+
+    public static void storeUserId(Context mContext, String mUserId) {
+        SharedPreferences mPrefs = mContext.getSharedPreferences(AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+        mPrefs.edit()
+                .putString(AppConfig.Const.CURRENT_USER_ID, mUserId)
+                .apply();
+    }
+
+    public static String parseJWTToken(String input) throws JSONException {
+        JSONObject jsObj = new JSONObject(input);
+        return jsObj.getString("token");
+    }
+
+    public static String parseUserId(String input) throws JSONException {
+        JSONObject jsObj = new JSONObject(input);
+        return jsObj.getJSONObject("party").getString("_id");
     }
 
     public static Jurisdiction getReporterJurisdiction(Context mContext) {

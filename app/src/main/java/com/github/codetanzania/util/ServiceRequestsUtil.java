@@ -48,7 +48,7 @@ public class ServiceRequestsUtil {
                 // .excludeFieldsWithoutExposeAnnotation()
                 .create();
         JsonElement jsElement = new JsonParser().parse(json);
-        Log.d(TAG, "An Object is" + gson.toJson(jsElement));
+        Log.d(TAG, "An Object is " + gson.toJson(jsElement));
         JsonObject  jsObject  = jsElement.getAsJsonObject();
         JsonArray   jsArray   = jsObject.getAsJsonArray("servicerequests");
         Log.d(TAG, gson.toJson(jsArray));

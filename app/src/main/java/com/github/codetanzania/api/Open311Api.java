@@ -2,13 +2,13 @@ package com.github.codetanzania.api;
 
 import android.content.Context;
 
-import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.model.ServiceGroup;
 import com.github.codetanzania.model.adapter.ServiceRequests;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -19,6 +19,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import tz.co.codetanzania.R;
 
 public class Open311Api {
@@ -37,15 +38,15 @@ public class Open311Api {
         @Headers({"Accept: application/json"})
         Call<ServiceRequests> getByUserId(/*@Header("Authorization")*/String jwtToken);
 
-        @GET("/servicerequests")
+        @GET("/servicerequests/{userId}")
         @Headers({"Accept: application/json"})
-        Call<ResponseBody> getByUserId();
+        Call<ResponseBody> getByUserId(@Path("userId") String userId, @Header("Authorization") String authorization);
     }
 
     public interface AuthEndpoint {
         @POST("/signin")
         @Headers({"Accept: application/json", "Content-Type: application/json"})
-        Call<ResponseBody> signIn(@Body Reporter reporter);
+        Call<ResponseBody> signIn(@Body Map<String, String> reporter);
     }
 
     public static class ServiceBuilder {
