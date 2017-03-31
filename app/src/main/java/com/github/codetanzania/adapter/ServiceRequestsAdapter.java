@@ -2,6 +2,9 @@ package com.github.codetanzania.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -73,9 +76,16 @@ public class ServiceRequestsAdapter extends
                 lastActionDateStr = sdf.format(serviceRequest.status.updatedAt);
             }
 
+            /*((ServiceRequestViewHolder)holder).tvStatus.setCompoundDrawables(
+                    null, null, ContextCompat.getDrawable(mContext, R.drawable.ic_warning_24dp), null);*/
+
             ((ServiceRequestViewHolder)holder).vwStatusView.setBackgroundColor(Color.parseColor(serviceRequest.status.color));
             ((ServiceRequestViewHolder)holder).tvServiceReqResolvedAt.setText(lastActionDateStr);
             ((ServiceRequestViewHolder)holder).tvServiceReqCode.setText(serviceRequest.service.name.substring(0,2).toUpperCase());
+
+            Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.bg_circular_lbl);
+            drawable.setColorFilter(Color.parseColor(serviceRequest.service.color), PorterDuff.Mode.MULTIPLY);
+            ((ServiceRequestViewHolder)holder).tvServiceReqCode.setBackground(drawable);
         }
     }
 
@@ -96,6 +106,7 @@ public class ServiceRequestsAdapter extends
         TextView tvServiceReqTitle;
         TextView tvServiceReqTicket;
         TextView tvServiceReqResolvedAt;
+        TextView tvStatus;
         View     vwStatusView;
 
         ServiceRequestViewHolder(View itemView) {
@@ -105,6 +116,7 @@ public class ServiceRequestsAdapter extends
             tvServiceReqTitle = (TextView) itemView.findViewById(R.id.tv_serviceReqTitle);
             tvServiceReqResolvedAt = (TextView) itemView.findViewById(R.id.tv_serviceReqResolvedAt);
             tvServiceReqTicket = (TextView) itemView.findViewById(R.id.tv_serviceReqTicket);
+            tvStatus = (TextView) itemView.findViewById(R.id.tv_Status);
             vwStatusView = itemView.findViewById(R.id.vw_serviceReqStatus);
         }
     }

@@ -7,15 +7,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.android.ex.chips.RecipientEditTextView;
+import com.github.codetanzania.IssueTicketGroupsActivity;
 import com.github.codetanzania.ServiceGroupItemsActivity;
+import com.github.codetanzania.model.Reporter;
+import com.github.codetanzania.util.Util;
 
 import tz.co.codetanzania.R;
 
@@ -27,9 +34,6 @@ public class IDFragment extends Fragment {
     /* Permission Code to read Accounts */
     private static final int ACCOUNTS_PERMISSION_CODE = 0;
 
-    /* RecipientEditTextView from https://github.com/klinker41/android-chips. */
-    private RecipientEditTextView reEmailTextView;
-
     /* fragment lifecycle callback. create fragment's view */
     @Override
     public View onCreateView(
@@ -39,20 +43,34 @@ public class IDFragment extends Fragment {
 
     /* fragment lifecycle callback. attach events */
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        // let user select email
-        /*reEmailTextView = (RecipientEditTextView) view.findViewById(R.id.re_userName);
-        reEmailTextView.setTokenizer(new Rfc822Tokenizer());
-        final BaseRecipientAdapter reAdapter = new BaseRecipientAdapter(
-                BaseRecipientAdapter.QUERY_TYPE_EMAIL, getActivity());
-        reAdapter.setShowMobileOnly(false);
-        reEmailTextView.dismissDropDownOnItemSelected(true);
-        reEmailTextView.setAdapter(reAdapter);*/
-
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
+        final EditText etUserName = (EditText) view.findViewById(R.id.et_userName);
+        final EditText etPhone = (EditText) view.findViewById(R.id.et_phoneNumber);
         view.findViewById(R.id.btn_Next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), ServiceGroupItemsActivity.class));
+                Editable phoneNumber = etPhone.getText();
+                Editable userName    = etUserName.getText();
+                boolean hasError = false;
+
+                if (TextUtils.isEmpty(userName)) {
+                    ((TextInputLayout) view.findViewById(R.id.til_UserName)).setError("User name is required");
+                    hasError = true;
+                }
+
+                if (TextUtils.isEmpty(phoneNumber)) {
+                    ((TextInputLayout) view.findViewById(R.id.til_PhoneNumber)).setError("Phone number is required");
+                    hasError = true;
+                }
+
+                if (!hasError) {
+                    // TODO: start OTP VERIFICATION INSTEAD
+                    Reporter reporter = new Reporter();
+                    reporter.phone = String.format("%s%s","255",phoneNumber.toString());
+                    reporter.name  = userName.toString();
+                    Util.storeCurrentReporter(getActivity(), reporter);
+                    startActivity(new Intent(getActivity(), IssueTicketGroupsActivity.class));
+                }
             }
         });
     }
@@ -86,9 +104,7 @@ public class IDFragment extends Fragment {
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED) {
             AccountManager manager = (AccountManager) getActivity().getSystemService(Context.ACCOUNT_SERVICE);
             Account[] accounts = new Account[0];
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.ECLAIR) {
-                accounts = manager.getAccounts();
-            }
+            accounts = manager.getAccounts();
             Log.d(TAG, accounts.toString());
         }
     }

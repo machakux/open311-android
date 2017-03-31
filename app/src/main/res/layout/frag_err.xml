@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="@color/gray">
 
     <!-- Default error message is "Error loading data from the server" -->
     <!-- Default icon is no Internet connection -->

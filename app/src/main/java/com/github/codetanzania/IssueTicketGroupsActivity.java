@@ -2,24 +2,28 @@ package com.github.codetanzania;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.github.codetanzania.api.Open311Api;
+import com.github.codetanzania.fragment.EmptyIssuesFragment;
 import com.github.codetanzania.fragment.ErrorFragment;
 import com.github.codetanzania.fragment.ProgressBarFragment;
 import com.github.codetanzania.fragment.ServiceRequestsFragment;
 import com.github.codetanzania.model.ServiceRequest;
-import com.github.codetanzania.model.adapter.ServiceRequests;
 import com.github.codetanzania.util.ServiceRequestsUtil;
+import com.github.codetanzania.util.Util;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -34,42 +38,101 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
     /* used by the logcat */
     private static final String TAG = "TicketGroupsActivity";
 
-    /* ProgressBarFragment */
-    private ProgressBarFragment mProgressBarFrag;
-
-    /* ErrorFragment */
-    private ErrorFragment mErrorFrag;
-
-    /* ServiceRequestsFragment */
-    private ServiceRequestsFragment mServiceRequestsFrag;
-
     /* Floating Action bar button */
     private FloatingActionButton mFab;
+
+    /* Frame layout */
+    private FrameLayout mFrameLayout;
 
     /* An error flag */
     private boolean isErrorState = false;
 
+    /*
+     * Menu items will be hidden when different fragment
+     * than ServiceRequestsFragment is committed
+     */
+    private MenuItem mSearchMenuItem;
+    private MenuItem mSwitchCompat;
+    private MenuItem mUserProfileMenuItem;
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_tickets_group);
+        mFrameLayout = (FrameLayout) findViewById(R.id.frl_TicketsActivity);
     }
 
     @Override public void onResume() {
         super.onResume();
+
+        try {
+            // check if the application is installed for the first time or
+            // if the reporter has not signed in yet.
+            // if it is, then we start the verification activity (through OTP)
+            if (Util.isFirstRun(this, Util.RunningMode.FIRST_TIME_INSTALL) || Util.getCurrentReporter(this) == null) {
+                Intent verificationIntent = new Intent(this, IDActivity.class);
+                startActivity(verificationIntent);
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         loadServiceRequests();
     }
 
     @Override public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         mFab = (FloatingActionButton) findViewById(R.id.fab_ReportIssue);
+        mFab.setAlpha(0.0f);
+    }
+
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.issues, menu);
+        mSwitchCompat = menu.findItem(R.id.item_toggle_pending);
+        final SwitchCompat switchCompat = (SwitchCompat) mSearchMenuItem.getActionView();
+        mSearchMenuItem = menu.findItem(R.id.item_search);
+        mUserProfileMenuItem = menu.findItem(R.id.item_user_acc);
+        // default -- show resolved issues
+        switchCompat.setChecked(true);
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.item_user_acc:
+                startActivity(new Intent(this, CivilianProfileActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /* show or hide menu items */
+    private void showMenuItems(boolean show) {
+        mSearchMenuItem.setVisible(show);
+        mSwitchCompat.setVisible(show);
+        // mUserProfileMenuItem.setVisible(show);
     }
 
     private void loadServiceRequests() {
-        mProgressBarFrag = ProgressBarFragment.getInstance();
+
+        // hide controls. no need to show them while data is being loaded
+        showMenuItems(false);
+
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mFrameLayout.getLayoutParams();
+        lp.gravity = Gravity.CENTER;
+
+        ProgressBarFragment mProgressBarFrag = ProgressBarFragment.getInstance();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.ll_TicketsActivity, mProgressBarFrag)
+                .replace(R.id.frl_TicketsActivity, mProgressBarFrag)
                 .disallowAddToBackStack()
-                .commit();
+                .commitAllowingStateLoss();
 
         // load data from the server
         try {
@@ -91,17 +154,35 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
 
     private void displayServiceRequests(SparseArray<ServiceRequest> requests) {
         Bundle args = new Bundle();
-        args.putSparseParcelableArray(
-                ServiceRequestsFragment.SERVICE_REQUESTS, requests);
-        mServiceRequestsFrag = ServiceRequestsFragment.getInstance(args);
 
-        getSupportFragmentManager()
-            .beginTransaction()
-            .replace(R.id.ll_TicketsActivity, mServiceRequestsFrag)
-            .disallowAddToBackStack()
-            .commitAllowingStateLoss();
+        EmptyIssuesFragment frag = EmptyIssuesFragment.getNewInstance(null);
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mFrameLayout.getLayoutParams();
 
-        // enable the fab
+        if (requests.size() == 0) {
+            // show empty issues message
+            lp.gravity = Gravity.CENTER;
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frl_TicketsActivity, frag)
+                    .disallowAddToBackStack()
+                    .commitAllowingStateLoss();
+        } else {
+            args.putSparseParcelableArray(
+                    ServiceRequestsFragment.SERVICE_REQUESTS, requests);
+            ServiceRequestsFragment mServiceRequestsFrag = ServiceRequestsFragment.getInstance(args);
+            lp.gravity = Gravity.TOP;
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frl_TicketsActivity, mServiceRequestsFrag)
+                    .disallowAddToBackStack()
+                    .commitAllowingStateLoss();
+
+            // show menu items only when we have more than
+            showMenuItems(true);
+        }
+
+        // show the fab
         mFab.animate().alpha(1.0f);
     }
 
@@ -111,16 +192,22 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
             return;
         }
 
+        // hide controls. no need to show them here
+        showMenuItems(false);
+
         Bundle args = packForError(
             getString(R.string.msg_server_error), R.drawable.ic_cloud_off_48x48);
 
-        mErrorFrag = ErrorFragment.getInstance(args);
+        ErrorFragment mErrorFrag = ErrorFragment.getInstance(args);
+
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mFrameLayout.getLayoutParams();
+        lp.gravity = Gravity.CENTER;
 
         getSupportFragmentManager()
             .beginTransaction()
-            .replace(R.id.ll_TicketsActivity, mErrorFrag)
+            .replace(R.id.frl_TicketsActivity, mErrorFrag)
             .disallowAddToBackStack()
-            .commit();
+            .commitAllowingStateLoss();
 
         // disable the fab
         mFab.animate().alpha(0.0f);

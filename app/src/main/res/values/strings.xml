@@ -10,15 +10,34 @@
     <string name="text_zipCode">Zip code</string>
     <string name="action_startReport">Select Category</string>
     <string name="enpoint_url">http://10.42.0.1:3000</string>
-    <string name="txt_loading">Loading&#8230;</string>
+    <string name="txt_loading">&#8230;</string>
     <string name="msg_server_error">Error loading data from the server</string>
     <string name="action_reload">Try Again</string>
+    <string name="action_toggle_pending">Toggle Pending</string>
+    <string name="action_view_account">User Account</string>
+    <string name="action_search">Search</string>
+    <string name="text_user_phone">Phone number</string>
+    <string name="text_empty_phone">Not provided</string>
+    <string name="text_profile_desc">Profile picture</string>
+    <string name="text_user_email">Email</string>
+    <string name="text_empty_email">Not provided</string>
+    <string name="text_user_location">Area</string>
+    <string name="text_empty_location">Not provided</string>
+    <string name="text_user_meter_number">Meter Number</string>
+    <string name="text_empty_meter_number">Not provided</string>
+    <string name="action_logout">Log out</string>
+    <string name="text_confirm_logout">Are you sure you want to logout?</string>
+    <string name="action_stay">Stay</string>
+    <string name="text_empty_issues">You have not reported any issue.</string>
+    <string name="default_zip_code">255</string>
+    <string name="text_signing_up">Signing Up</string>
+    <string name="text_StatusText">Please wait while we\'re creating your account</string>
 
     <string-array name="duration_names">
-        <item>TODAY</item>
-        <item>YESTERDAY</item>
-        <item>THIS WEEK</item>
-        <item>THIS MONTH</item>
-        <item>OLD ISSUES</item>
+        <item>Today</item>
+        <item>Yesterday</item>
+        <item>This week</item>
+        <item>This month</item>
+        <item>Old Issues</item>
     </string-array>
 </resources>
