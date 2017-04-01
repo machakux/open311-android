@@ -61,8 +61,9 @@ public class SplashScreenActivity extends AppCompatActivity implements Callback<
                 String jsonString = response.body().string();
                 String token = Util.parseJWTToken(jsonString);
                 Util.storeAuthToken(this, token);
-                String userId = Util.parseUserId(jsonString);
-                Util.storeUserId(this, userId);
+                // String userId = Util.parseUserId(jsonString);
+                // Log.d(TAG, "user identity is " + userId);
+                // Util.storeUserId(this, userId);
                 Log.d(TAG, "response body was " + token);
                 // go to issues
                 startActivity(new Intent(this, IssueTicketGroupsActivity.class));
@@ -89,5 +90,7 @@ public class SplashScreenActivity extends AppCompatActivity implements Callback<
     public void onFailure(Call<ResponseBody> call, Throwable t) {
         Toast.makeText(this, "Network error", Toast.LENGTH_LONG).show();
         Log.e(TAG, "An error was " + t.getMessage());
+        startActivity(new Intent(this, ErrorActivity.memoizeClass(SplashScreenActivity.class)));
+        finish();
     }
 }

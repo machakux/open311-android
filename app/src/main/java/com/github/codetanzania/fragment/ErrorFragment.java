@@ -46,8 +46,13 @@ public class ErrorFragment extends Fragment {
     @Override public void onViewCreated(View view, Bundle savedInstanceState) {
         // bind data to the components
         Bundle bundle = getArguments();
-        String  errMsg = bundle.getString(ERROR_MSG);
-        Integer errIcn = bundle.getInt(ERROR_ICN);
+        String errMsg;
+        if (bundle != null) {
+            errMsg = bundle.getString(ERROR_MSG, getString(R.string.msg_server_error));
+        } else {
+            errMsg = getString(R.string.msg_server_error);
+        }
+        // Integer errIcn = bundle.getInt(ERROR_ICN);
 
         tvErrorIcn = (TextView) view.findViewById(R.id.tv_ErrorMsg);
         btnReload  = (Button) view.findViewById(R.id.btn_Reload);

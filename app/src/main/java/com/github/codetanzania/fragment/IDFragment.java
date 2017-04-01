@@ -18,9 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.android.ex.chips.RecipientEditTextView;
 import com.github.codetanzania.IssueTicketGroupsActivity;
-import com.github.codetanzania.ServiceGroupItemsActivity;
 import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.util.Util;
 

@@ -41,6 +41,9 @@ public class ServiceRequestsUtil {
 
 
     public static SparseArray<ServiceRequest> fromJson(String json) throws IOException {
+
+        Log.d(TAG, "Trying to convert " + json + "Inot something useful a system can understand.");
+
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 // See http://stackoverflow.com/questions/32431279/android-m-retrofit-json-cant-make-field-constructor-accessible

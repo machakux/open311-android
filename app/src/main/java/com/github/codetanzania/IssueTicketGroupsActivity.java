@@ -19,6 +19,7 @@ import com.github.codetanzania.fragment.EmptyIssuesFragment;
 import com.github.codetanzania.fragment.ErrorFragment;
 import com.github.codetanzania.fragment.ProgressBarFragment;
 import com.github.codetanzania.fragment.ServiceRequestsFragment;
+import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.model.ServiceRequest;
 import com.github.codetanzania.util.ServiceRequestsUtil;
 import com.github.codetanzania.util.Util;
@@ -135,15 +136,17 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
                 .commitAllowingStateLoss();
 
         String token = Util.getAuthToken(this);
-        String userId = Util.getCurrentUserId(this);
+        Reporter reporter = Util.getCurrentReporter(this);
+        assert reporter != null;
+        String queryParams = String.format("{\"reporter.phone\":\"%s\"}", reporter.phone);
 
-        assert token != null && userId != null;
+        assert token != null;
 
         // load data from the server
         try {
             Open311Api.ServiceBuilder api = new Open311Api.ServiceBuilder(this);
             api.build(Open311Api.ServiceRequestEndpoint.class)
-                .getByUserId(userId, String.format("Bearer %s", token)).enqueue(this);
+                .getByUserId(queryParams, String.format("Bearer %s", token)).enqueue(this);
 
         } catch (Exception e) {
             Log.e(TAG, "An error was " + e.getMessage());
