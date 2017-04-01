@@ -81,11 +81,11 @@ public class ServiceRequestsAdapter extends
 
             ((ServiceRequestViewHolder)holder).vwStatusView.setBackgroundColor(Color.parseColor(serviceRequest.status.color));
             ((ServiceRequestViewHolder)holder).tvServiceReqResolvedAt.setText(lastActionDateStr);
-            ((ServiceRequestViewHolder)holder).tvServiceReqCode.setText(serviceRequest.service.name.substring(0,2).toUpperCase());
+            // ((ServiceRequestViewHolder)holder).tvServiceReqCode.setText(serviceRequest.service.name.substring(0,2).toUpperCase());
 
-            Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.bg_circular_lbl);
-            drawable.setColorFilter(Color.parseColor(serviceRequest.service.color), PorterDuff.Mode.MULTIPLY);
-            ((ServiceRequestViewHolder)holder).tvServiceReqCode.setBackground(drawable);
+            // Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.bg_circular_lbl);
+            // drawable.setColorFilter(Color.parseColor(serviceRequest.service.color), PorterDuff.Mode.MULTIPLY);
+            // ((ServiceRequestViewHolder)holder).tvServiceReqCode.setBackground(drawable);
         }
     }
 
