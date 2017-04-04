@@ -16,6 +16,8 @@ public class ServiceRequest implements Parcelable {
     private static final String TAG = "ServiceRequest";
 
     public ServiceRequest(Parcel in) {
+        id = in.readString();
+        description = in.readString();
         jurisdiction = in.readParcelable(Jurisdiction.class.getClassLoader());
         service = in.readParcelable(Service.class.getClassLoader());
         reporter = in.readParcelable(Reporter.class.getClassLoader());
@@ -25,6 +27,8 @@ public class ServiceRequest implements Parcelable {
         attachments = in.createStringArrayList();
         comments = in.createTypedArrayList(Comment.CREATOR);
         status = in.readParcelable(Status.class.getClassLoader());
+        createdAt = new Date(in.readLong());
+        updatedAt = new Date(in.readLong());
         resolvedAt = new Date(in.readLong());
     }
 
@@ -49,6 +53,8 @@ public class ServiceRequest implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(description);
         parcel.writeParcelable(jurisdiction, i);
         parcel.writeParcelable(service, i);
         parcel.writeParcelable(reporter, i);
@@ -58,6 +64,8 @@ public class ServiceRequest implements Parcelable {
         parcel.writeStringList(attachments);
         parcel.writeTypedList(comments);
         parcel.writeParcelable(status, i);
+        parcel.writeLong(createdAt.getTime());
+        parcel.writeLong(updatedAt.getTime());
         if (resolvedAt != null) {
             parcel.writeLong(resolvedAt.getTime());
         }
@@ -106,14 +114,17 @@ public class ServiceRequest implements Parcelable {
             parcel.writeString(name);
             parcel.writeFloat(weight);
             parcel.writeString(color);
-            parcel.writeString(updatedAt.toString());
-            parcel.writeString(createdAt.toString());
+            if (updatedAt != null)
+                parcel.writeString(updatedAt.toString());
+            if (createdAt != null)
+                parcel.writeString(createdAt.toString());
         }
     }
 
    /* public enum Priority {
         LOW, NORMAL, HIGH
     }*/
+   public String id;
 
     // @Column(name = "jurisdiction")
     public Jurisdiction jurisdiction;
@@ -144,6 +155,12 @@ public class ServiceRequest implements Parcelable {
 
     // @Column(name = "resolved_at")
     public Date resolvedAt;
+
+    public Date createdAt;
+
+    public Date updatedAt;
+
+    public String description;
 
     // take comma separated strings and convert into an array of strings
     // public void setAttachments(String...attachments) {

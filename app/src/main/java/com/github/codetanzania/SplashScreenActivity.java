@@ -30,6 +30,10 @@ public class SplashScreenActivity extends AppCompatActivity implements Callback<
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override public void onResume() {
+        super.onResume();
         getJWTToken();
     }
 
@@ -91,6 +95,6 @@ public class SplashScreenActivity extends AppCompatActivity implements Callback<
         Toast.makeText(this, "Network error", Toast.LENGTH_LONG).show();
         Log.e(TAG, "An error was " + t.getMessage());
         startActivity(new Intent(this, ErrorActivity.memoizeClass(SplashScreenActivity.class)));
-        finish();
+        // finish();
     }
 }

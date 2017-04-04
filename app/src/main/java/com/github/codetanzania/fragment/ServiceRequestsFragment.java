@@ -1,5 +1,7 @@
 package com.github.codetanzania.fragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -11,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.codetanzania.adapter.OnItemClickListener;
 import com.github.codetanzania.adapter.ServiceRequestsAdapter;
 import com.github.codetanzania.model.ServiceRequest;
 import com.github.codetanzania.model.adapter.ServiceRequests;
@@ -33,6 +36,10 @@ public class ServiceRequestsFragment extends Fragment {
 
     // singleton instance
     private static ServiceRequestsFragment mSelf;
+
+    // instance to the click listener will be passed along
+    // to the RecyclerView's adapter
+    private OnItemClickListener<ServiceRequest> mClickListener;
 
     private RecyclerView rvTodayServiceRequests;
     private RecyclerView rvYesterdayServiceRequests;
@@ -76,6 +83,13 @@ public class ServiceRequestsFragment extends Fragment {
         bindServiceRequests(serviceRequests);
     }
 
+    @Override
+    public void onAttach(Context theContext) {
+        super.onAttach(theContext);
+        // cast context... it must implement so!
+        mClickListener = (OnItemClickListener<ServiceRequest>) theContext;
+    }
+
     private void bindServiceRequests(
             SparseArray<ServiceRequest> serviceRequests) {
 
@@ -94,7 +108,8 @@ public class ServiceRequestsFragment extends Fragment {
         for (Integer key : grouped.keySet()) {
             if (!grouped.get(key).isEmpty()) {
                 ServiceRequestsAdapter adapter = new ServiceRequestsAdapter(
-                        getActivity(), ServiceRequestsUtil.getI18NTitle(getActivity(), key), grouped.get(key)
+                        getActivity(), ServiceRequestsUtil.getI18NTitle(getActivity(), key), grouped.get(key),
+                        mClickListener
                 );
 
                 RecyclerView recyclerView;

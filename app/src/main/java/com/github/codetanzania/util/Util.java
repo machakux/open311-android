@@ -3,6 +3,7 @@ package com.github.codetanzania.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.github.codetanzania.model.Jurisdiction;
@@ -18,6 +19,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 public class Util {
 
@@ -27,7 +32,6 @@ public class Util {
         FIRST_TIME_INSTALL,
         FIRST_TIME_UPGRADE
     }
-
 
 
     public static boolean isFirstRun(Context mContext, RunningMode mRunningMode) throws Exception {
@@ -131,6 +135,32 @@ public class Util {
     public static String parseUserId(String input) throws JSONException {
         JSONObject jsObj = new JSONObject(input);
         return jsObj.getJSONObject("party").getString("_id");
+    }
+
+    public static String inferContentType(@NonNull String urlStr) {
+
+        String exts[][] =
+            {{"aac", "mp3", "ogg"},
+             {"flv", "mp4", "webm"},
+             {"jpeg", "jpg", "png"}};
+
+        String parties[] = {"audio", "video", "image"};
+        int index; String ext = "binary/octet-stream", haystack = urlStr.substring(1 + urlStr.lastIndexOf("."));
+        Log.d(TAG, haystack);
+        for (int i = 0; i < exts.length; ++i) {
+            index = Arrays.binarySearch(exts[i], haystack);
+            if (index >= 0) {
+                ext = String.format("%s/%s", parties[i], exts[i][index]);
+                break;
+            }
+        }
+        return ext;
+    }
+
+    public static String formatDate(
+            @NonNull Date d, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.US);
+        return sdf.format(d);
     }
 
     public static Jurisdiction getReporterJurisdiction(Context mContext) {

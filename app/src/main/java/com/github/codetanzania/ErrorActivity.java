@@ -23,11 +23,11 @@ public class ErrorActivity extends AppCompatActivity
 
     @Override
     public void onReloadClicked() {
-        Intent intent = new Intent(this, pongClass);
-        if (mRetBundle != null) {
-            intent.putExtras(mRetBundle);
-        }
-        startActivity(intent);
+//        Intent intent = new Intent(this, pongClass);
+//        if (mRetBundle != null) {
+//            intent.putExtras(mRetBundle);
+//        }
+//        startActivity(intent);
         finish();
     }
 

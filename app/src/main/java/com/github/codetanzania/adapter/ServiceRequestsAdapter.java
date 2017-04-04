@@ -20,7 +20,7 @@ import java.util.Locale;
 import tz.co.codetanzania.R;
 
 public class ServiceRequestsAdapter extends
-        RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        ClickAwareRecyclerViewAdapter {
 
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
@@ -35,7 +35,9 @@ public class ServiceRequestsAdapter extends
     private Context mContext;
 
     /* constructor */
-    public ServiceRequestsAdapter(Context mContext, String title, List<ServiceRequest> serviceRequests) {
+    public ServiceRequestsAdapter(
+            Context mContext, String title, List<ServiceRequest> serviceRequests, OnItemClickListener onItemClickListener) {
+        super(onItemClickListener);
         this.mTitle = title;
         this.mServiceRequests = serviceRequests;
         this.mContext = mContext;
@@ -47,7 +49,7 @@ public class ServiceRequestsAdapter extends
         LayoutInflater inflater = LayoutInflater.from(mContext);
         if (viewType == TYPE_ITEM) {
             View view = inflater.inflate(R.layout.issue_ticket, parent, false);
-            return new ServiceRequestViewHolder(view);
+            return new ServiceRequestViewHolder(view, mClickListener);
         } else if (viewType == TYPE_HEADER) {
             View view = inflater.inflate(R.layout.issue_ticket_groups_title, parent, false);
             return new ServiceHeaderViewHolder(view);
@@ -86,6 +88,7 @@ public class ServiceRequestsAdapter extends
             // Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.bg_circular_lbl);
             // drawable.setColorFilter(Color.parseColor(serviceRequest.service.color), PorterDuff.Mode.MULTIPLY);
             // ((ServiceRequestViewHolder)holder).tvServiceReqCode.setBackground(drawable);
+            ((ServiceRequestViewHolder)holder).bind(serviceRequest, ((ServiceRequestViewHolder)holder).crdTicketItem);
         }
     }
 
@@ -108,9 +111,14 @@ public class ServiceRequestsAdapter extends
         TextView tvServiceReqResolvedAt;
         TextView tvStatus;
         View     vwStatusView;
+        View     crdTicketItem;
 
-        ServiceRequestViewHolder(View itemView) {
+        private OnItemClickListener mClickListener;
+
+        ServiceRequestViewHolder(View itemView, OnItemClickListener mClickListener) {
             super(itemView);
+
+            this.mClickListener = mClickListener;
 
             tvServiceReqCode = (TextView) itemView.findViewById(R.id.tv_serviceReqCode);
             tvServiceReqTitle = (TextView) itemView.findViewById(R.id.tv_serviceReqTitle);
@@ -118,6 +126,16 @@ public class ServiceRequestsAdapter extends
             tvServiceReqTicket = (TextView) itemView.findViewById(R.id.tv_serviceReqTicket);
             tvStatus = (TextView) itemView.findViewById(R.id.tv_Status);
             vwStatusView = itemView.findViewById(R.id.vw_serviceReqStatus);
+            crdTicketItem = itemView.findViewById(R.id.crd_TicketItem);
+        }
+
+        public void bind(final ServiceRequest request, View view) {
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mClickListener.onItemClick(request);
+                }
+            });
         }
     }
 
@@ -130,4 +148,5 @@ public class ServiceRequestsAdapter extends
             tvHeader = (TextView) itemView.findViewById(R.id.tv_serviceReqHeaderName);
         }
     }
+
 }

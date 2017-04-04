@@ -3,7 +3,9 @@ package com.github.codetanzania;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
@@ -21,6 +23,8 @@ public class EditProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_profile);
         // retrieve current reporter
         bindDataToViews();
+        // bind events
+        bindEventsToViews();
     }
 
     private void bindDataToViews() {
@@ -59,6 +63,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
     // bind event
     public void bindEventsToViews () {
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
         View fab = findViewById(R.id.fab_EditProfile);
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {

@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.github.codetanzania.adapter.OnItemClickListener;
 import com.github.codetanzania.api.Open311Api;
 import com.github.codetanzania.fragment.EmptyIssuesFragment;
 import com.github.codetanzania.fragment.ErrorFragment;
@@ -21,6 +22,7 @@ import com.github.codetanzania.fragment.ProgressBarFragment;
 import com.github.codetanzania.fragment.ServiceRequestsFragment;
 import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.model.ServiceRequest;
+import com.github.codetanzania.util.AppConfig;
 import com.github.codetanzania.util.ServiceRequestsUtil;
 import com.github.codetanzania.util.Util;
 
@@ -34,7 +36,7 @@ import tz.co.codetanzania.R;
 
 /* tickets activity. load and display tickets from the server */
 public class IssueTicketGroupsActivity extends AppCompatActivity
-    implements ErrorFragment.OnReloadClickListener, Callback<ResponseBody> {
+    implements ErrorFragment.OnReloadClickListener, Callback<ResponseBody>, OnItemClickListener<ServiceRequest> {
 
     /* used by the logcat */
     private static final String TAG = "TicketGroupsActivity";
@@ -274,9 +276,20 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
 
     @Override
     public void onReloadClicked() {
-
         // reload the activity
         startActivity(new Intent(this, IssueTicketGroupsActivity.class));
         finish();
+    }
+
+    @Override
+    public void onItemClick(ServiceRequest theItem) {
+        // preview the item which was clicked
+        Intent theIntent = new Intent(this, IssueProgressActivity.class);
+        Bundle theBundle = new Bundle();
+        theBundle.putParcelable(AppConfig.Const.TICKET, theItem);
+        theIntent.putExtras(theBundle);
+        // bundle the intent
+        // start the activity
+        startActivity(theIntent);
     }
 }

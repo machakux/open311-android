@@ -37,6 +37,15 @@
     <string name="action_save_profile">Update</string>
     <string name="text_empty_name">Not provided</string>
     <string name="text_empty_account">Not provided</string>
+    <string name="action_view_details">View Details</string>
+    <string name="action_issue_progress">Issue Progress</string>
+    <string name="action_show_on_map">Show On Map</string>
+    <string name="text_issue_attachment">Attachments</string>
+    <string name="text_audio_attachment">Audio</string>
+    <string name="text_video_attachment">Video</string>
+    <string name="text_log_content"><![CDATA[%s]]></string>
+    <string name="text_log_extras"><![CDATA[%s@]]></string>
+    <string name="text_logs">Internal Notes</string>
 
     <string-array name="duration_names">
         <item>Today</item>
@@ -44,5 +53,10 @@
         <item>This week</item>
         <item>This month</item>
         <item>Old Issues</item>
+    </string-array>
+
+    <string-array name="details_viewpager_titles">
+        <item>Details</item>
+        <item>Progress</item>
     </string-array>
 </resources>
