@@ -15,6 +15,21 @@ public class ServiceRequest implements Parcelable {
 
     private static final String TAG = "ServiceRequest";
 
+    public static final String _ID = "id";
+    public static final String DESCRIPTION = "description";
+    public static final String JURISDICTION = "jurisdiction";
+    public static final String SERVICE = "service";
+    public static final String REPORTER = "reporter";
+    public static final String ADDRESS = "address";
+    public static final String LONGITUDE = "longitude";
+    public static final String LATITUDE = "latitude";
+    public static final String ATTACHMENTS = "attachments";
+    public static final String COMMENTS = "comments";
+    public static final String STATUS = "status";
+    public static final String CREATED_AT = "createdAt";
+    public static final String UPDATED_AT = "updatedAt";
+    public static final String RESOLVED_AT = "resolvedAt";
+
     public ServiceRequest(Parcel in) {
         id = in.readString();
         description = in.readString();

@@ -6,6 +6,11 @@ import android.os.Parcelable;
 // @Table(name = "service", id = BaseColumns._ID)
 public class Service implements Parcelable {
 
+    public static final String CODE = "code";
+    public static final String NAME = "name";
+    public static final String DESCRIPTION = "description";
+    public static final String COLOR = "color";
+
     // @Column(name = "code")
     public String code;
 

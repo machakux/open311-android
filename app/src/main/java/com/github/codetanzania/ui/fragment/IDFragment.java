@@ -1,4 +1,4 @@
-package com.github.codetanzania.fragment;
+package com.github.codetanzania.ui.fragment;
 
 import android.Manifest;
 import android.accounts.Account;
@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.github.codetanzania.IssueTicketGroupsActivity;
+import com.github.codetanzania.ui.activity.IssueTicketGroupsActivity;
 import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.util.Util;
 

@@ -1,6 +1,5 @@
-package com.github.codetanzania.fragment;
+package com.github.codetanzania.ui.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,11 +15,9 @@ import android.view.ViewGroup;
 import com.github.codetanzania.adapter.OnItemClickListener;
 import com.github.codetanzania.adapter.ServiceRequestsAdapter;
 import com.github.codetanzania.model.ServiceRequest;
-import com.github.codetanzania.model.adapter.ServiceRequests;
 import com.github.codetanzania.util.ServiceRequestsUtil;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

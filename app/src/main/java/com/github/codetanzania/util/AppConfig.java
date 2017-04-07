@@ -17,5 +17,7 @@ public class AppConfig {
 
         public static final String TICKET = "app.ticket";
         public static final String ISSUE_COMMENTS = "app.ticket.comments";
+
+        public static final String DATE_LAST_MODIFIED = "date_last_modified";
     }
 }

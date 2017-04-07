@@ -1,4 +1,4 @@
-package com.github.codetanzania;
+package com.github.codetanzania.ui.activity;
 
 import android.Manifest;
 import android.content.pm.PackageManager;

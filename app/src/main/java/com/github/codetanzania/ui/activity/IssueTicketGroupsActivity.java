@@ -1,25 +1,23 @@
-package com.github.codetanzania;
+package com.github.codetanzania.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.github.codetanzania.adapter.OnItemClickListener;
 import com.github.codetanzania.api.Open311Api;
-import com.github.codetanzania.fragment.EmptyIssuesFragment;
-import com.github.codetanzania.fragment.ErrorFragment;
-import com.github.codetanzania.fragment.ProgressBarFragment;
-import com.github.codetanzania.fragment.ServiceRequestsFragment;
+import com.github.codetanzania.ui.fragment.EmptyIssuesFragment;
+import com.github.codetanzania.ui.fragment.ErrorFragment;
+import com.github.codetanzania.ui.fragment.ProgressBarFragment;
+import com.github.codetanzania.ui.fragment.ServiceRequestsFragment;
 import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.model.ServiceRequest;
 import com.github.codetanzania.util.AppConfig;

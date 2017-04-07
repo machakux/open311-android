@@ -1,4 +1,4 @@
-package com.github.codetanzania;
+package com.github.codetanzania.ui.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;

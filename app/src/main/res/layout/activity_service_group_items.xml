@@ -5,5 +5,5 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.github.codetanzania.fragment.ServiceGroupItemsFragment"
-    tools:context="com.github.codetanzania.ServiceGroupItemsActivity" />
+    android:name="com.github.codetanzania.ui.fragment.ServiceGroupItemsFragment"
+    tools:context="com.github.codetanzania.ui.activity.ServiceGroupItemsActivity" />

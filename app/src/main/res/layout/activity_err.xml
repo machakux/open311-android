@@ -4,5 +4,5 @@
     android:id="@+id/frag_Error"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.github.codetanzania.fragment.ErrorFragment"
-    tools:context="com.github.codetanzania.ErrorActivity" />
+    android:name="com.github.codetanzania.ui.fragment.ErrorFragment"
+    tools:context="com.github.codetanzania.ui.activity.ErrorActivity" />

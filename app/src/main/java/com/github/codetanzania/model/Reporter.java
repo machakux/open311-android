@@ -6,6 +6,11 @@ import android.provider.BaseColumns;
 
 public class Reporter implements Parcelable {
 
+    public static final String NAME = "name";
+    public static final String PHONE = "phone";
+    public static final String EMAIL = "email";
+    public static final String ACCOUNT = "account";
+
     // @Column(name = "name")
     public String name;
 

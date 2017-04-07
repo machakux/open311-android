@@ -8,6 +8,11 @@ import java.util.Date;
 // @Table(name = "comment", id = BaseColumns._ID)
 public class Comment implements Parcelable {
 
+    public static final String SERVICE = "service";
+    public static final String COMMENTER = "commenter";
+    public static final String TIMESTAMP = "timestamp";
+    public static final String CONTENT = "content";
+
     // @Column(name = "service", notNull = true)
     public Service service;
 

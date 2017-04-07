@@ -1,8 +1,7 @@
-package com.github.codetanzania;
+package com.github.codetanzania.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.widget.Toast;
 import com.github.codetanzania.api.Open311Api;
 import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.util.Util;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 
@@ -45,14 +43,15 @@ public class SplashScreenActivity extends AppCompatActivity implements Callback<
         } else {
 
             // todo: remove the next hardcoded lines when the api is ready to work with phone numbers
-            Map<String, String> map = new HashMap();
-            map.put("email", "lallyelias87@gmail.com");
-            map.put("password", "open311@qwerty");
-            new Open311Api
-                .ServiceBuilder(this)
-                .build(Open311Api.AuthEndpoint.class)
-                .signIn(map)
-                .enqueue(this);
+//            Map<String, String> map = new HashMap();
+//            map.put("email", "lallyelias87@gmail.com");
+//            map.put("password", "open311@qwerty");
+//            new Open311Api
+//                .ServiceBuilder(this)
+//                .build(Open311Api.AuthEndpoint.class)
+//                .signIn(map)
+//                .enqueue(this);
+            startActivity(new Intent(this, HomeMenuActivity.class));
         }
     }
 
@@ -70,7 +69,7 @@ public class SplashScreenActivity extends AppCompatActivity implements Callback<
                 // Util.storeUserId(this, userId);
                 Log.d(TAG, "response body was " + token);
                 // go to issues
-                startActivity(new Intent(this, IssueTicketGroupsActivity.class));
+                startActivity(new Intent(this, HomeMenuActivity.class));
                 // we won't come back here again
                 finish();
             } catch (IOException ioException) {

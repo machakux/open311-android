@@ -2,6 +2,7 @@ package com.github.codetanzania.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -39,6 +40,11 @@ public class ServiceRequestsUtil {
     public static final int THIS_MONTH_GROUP = 3;
     public static final int OLDEST_GROUP     = 4;
 
+    public static final void save(Context ctx, ServiceRequest[] requests) {
+        // save the requests to the shared preferences
+        SharedPreferences mPrefs = ctx.getSharedPreferences(
+                AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+    }
 
     public static SparseArray<ServiceRequest> fromJson(String json) throws IOException {
 

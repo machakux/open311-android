@@ -1,4 +1,4 @@
-package com.github.codetanzania.fragment;
+package com.github.codetanzania.ui.fragment;
 
 import android.os.Build;
 import android.os.Bundle;
