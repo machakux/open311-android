@@ -1,5 +1,7 @@
 package com.github.codetanzania.ui;
 
+import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
@@ -110,11 +112,11 @@ public class HomeMenu {
         private OnClickListener listener;
         private boolean enabled;
 
-        public HomeMenuItem(int id, String mTitle, int mIconResId) {
+        public HomeMenuItem(int id, @NonNull String mTitle, @IdRes int mIconResId) {
             this(id, mTitle, mIconResId, null);
         }
 
-        public HomeMenuItem(int id, String title, int mIconResId, OnClickListener listener) {
+        public HomeMenuItem(int id, @NonNull String title, @IdRes int mIconResId, OnClickListener listener) {
             this.mTitle = title;
             this.mIconResId = mIconResId;
             this.listener = listener;

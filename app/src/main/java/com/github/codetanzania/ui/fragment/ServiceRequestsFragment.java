@@ -31,9 +31,6 @@ public class ServiceRequestsFragment extends Fragment {
     // used by the logcat
     private static final String TAG = "ServiceReqFrag";
 
-    // singleton instance
-    private static ServiceRequestsFragment mSelf;
-
     // instance to the click listener will be passed along
     // to the RecyclerView's adapter
     private OnItemClickListener<ServiceRequest> mClickListener;
@@ -45,12 +42,10 @@ public class ServiceRequestsFragment extends Fragment {
     private RecyclerView rvOldestServiceRequests;
 
     // singleton method
-    public static ServiceRequestsFragment getInstance(Bundle args) {
-        if (mSelf == null) {
-            mSelf = new ServiceRequestsFragment();
-            mSelf.setArguments(args);
-        }
-        return mSelf;
+    public static ServiceRequestsFragment getNewInstance(Bundle args) {
+        ServiceRequestsFragment instance = new ServiceRequestsFragment();
+        instance.setArguments(args);
+        return instance;
     }
 
     @Override public View onCreateView(
@@ -84,7 +79,11 @@ public class ServiceRequestsFragment extends Fragment {
     public void onAttach(Context theContext) {
         super.onAttach(theContext);
         // cast context... it must implement so!
-        mClickListener = (OnItemClickListener<ServiceRequest>) theContext;
+        if (theContext instanceof OnItemClickListener) {
+            mClickListener = (OnItemClickListener<ServiceRequest>) theContext;
+        } else {
+            throw new IllegalStateException("Attached context must implement OnItemClickListener<T> interface");
+        }
     }
 
     private void bindServiceRequests(

@@ -177,7 +177,7 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
         } else {
             args.putSparseParcelableArray(
                     ServiceRequestsFragment.SERVICE_REQUESTS, requests);
-            ServiceRequestsFragment mServiceRequestsFrag = ServiceRequestsFragment.getInstance(args);
+            ServiceRequestsFragment mServiceRequestsFrag = ServiceRequestsFragment.getNewInstance(args);
             lp.gravity = Gravity.TOP;
 
             getSupportFragmentManager()

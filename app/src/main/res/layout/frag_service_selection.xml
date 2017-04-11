@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_FragNewIssue"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/ll_SelectOption"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_SelectOption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_select_issue_category"
+            android:textSize="18sp"/>
+
+        <RadioGroup
+            android:id="@+id/rg_SelectOption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
+
+            <RadioButton
+                android:id="@+id/radioBtn_PublicOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_public_issue"
+                android:checked="true"/>
+
+            <RadioButton
+                android:id="@+id/radioBtn_PrivateOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/text_private_issue"/>
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_Services"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/ll_SelectOption"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/tv_Services"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_services"
+            android:textSize="18sp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_Services"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbarAlwaysDrawHorizontalTrack="true">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_NextAction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btn_NextAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:drawableEnd="@drawable/ic_chevron_right_accent_24dp"
+            android:text="@string/action_next"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

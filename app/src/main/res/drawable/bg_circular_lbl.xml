@@ -16,6 +16,6 @@
         </shape>
     </item>
 
-    <item android:drawable="@drawable/ic_location_on_white_24dp" />
+    <!-- <item android:drawable="@drawable/ic_location_on_white_24dp" /> -->
 
 </layer-list>

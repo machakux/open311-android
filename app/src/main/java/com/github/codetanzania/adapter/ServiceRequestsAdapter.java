@@ -36,7 +36,7 @@ public class ServiceRequestsAdapter extends
 
     /* constructor */
     public ServiceRequestsAdapter(
-            Context mContext, String title, List<ServiceRequest> serviceRequests, OnItemClickListener onItemClickListener) {
+            Context mContext, String title, List<ServiceRequest> serviceRequests, OnItemClickListener<ServiceRequest> onItemClickListener) {
         super(onItemClickListener);
         this.mTitle = title;
         this.mServiceRequests = serviceRequests;
@@ -83,11 +83,11 @@ public class ServiceRequestsAdapter extends
 
             ((ServiceRequestViewHolder)holder).vwStatusView.setBackgroundColor(Color.parseColor(serviceRequest.status.color));
             ((ServiceRequestViewHolder)holder).tvServiceReqResolvedAt.setText(lastActionDateStr);
-            // ((ServiceRequestViewHolder)holder).tvServiceReqCode.setText(serviceRequest.service.name.substring(0,2).toUpperCase());
+            ((ServiceRequestViewHolder)holder).tvServiceReqCode.setText(serviceRequest.service.name.substring(0,2).toUpperCase());
 
-            // Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.bg_circular_lbl);
-            // drawable.setColorFilter(Color.parseColor(serviceRequest.service.color), PorterDuff.Mode.MULTIPLY);
-            // ((ServiceRequestViewHolder)holder).tvServiceReqCode.setBackground(drawable);
+            Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.bg_circular_lbl);
+            drawable.setColorFilter(Color.parseColor(serviceRequest.service.color), PorterDuff.Mode.MULTIPLY);
+            ((ServiceRequestViewHolder)holder).tvServiceReqCode.setBackground(drawable);
             ((ServiceRequestViewHolder)holder).bind(serviceRequest, ((ServiceRequestViewHolder)holder).crdTicketItem);
         }
     }
@@ -113,9 +113,9 @@ public class ServiceRequestsAdapter extends
         View     vwStatusView;
         View     crdTicketItem;
 
-        private OnItemClickListener mClickListener;
+        private OnItemClickListener<ServiceRequest> mClickListener;
 
-        ServiceRequestViewHolder(View itemView, OnItemClickListener mClickListener) {
+        ServiceRequestViewHolder(View itemView, OnItemClickListener<ServiceRequest> mClickListener) {
             super(itemView);
 
             this.mClickListener = mClickListener;
@@ -129,7 +129,7 @@ public class ServiceRequestsAdapter extends
             crdTicketItem = itemView.findViewById(R.id.crd_TicketItem);
         }
 
-        public void bind(final ServiceRequest request, View view) {
+        void bind(final ServiceRequest request, View view) {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
