@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 
 /**
- * This service fetches service-requests by using the profile of the
+ * This open311Service fetches open311Service-requests by using the profile of the
  * currently signed-in user.
  *
  * We use the http header If-Modified-Since to ask for the server to give

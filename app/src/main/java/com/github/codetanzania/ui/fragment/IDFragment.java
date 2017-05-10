@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.github.codetanzania.ui.activity.HomeMenuActivity;
 import com.github.codetanzania.ui.activity.IssueTicketGroupsActivity;
 import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.util.Util;
@@ -66,19 +67,9 @@ public class IDFragment extends Fragment {
                     reporter.phone = String.format("%s%s","255",phoneNumber.toString());
                     reporter.name  = userName.toString();
                     Util.storeCurrentReporter(getActivity(), reporter);
-                    startActivity(new Intent(getActivity(), IssueTicketGroupsActivity.class));
+                    startActivity(new Intent(getActivity(), HomeMenuActivity.class));
                 }
             }
         });
-    }
-
-
-    private void loadAccounts() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED) {
-            AccountManager manager = (AccountManager) getActivity().getSystemService(Context.ACCOUNT_SERVICE);
-            Account[] accounts = new Account[0];
-            accounts = manager.getAccounts();
-            Log.d(TAG, accounts.toString());
-        }
     }
 }

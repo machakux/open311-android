@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
-import com.github.codetanzania.model.Service;
+import com.github.codetanzania.model.Open311Service;
 import com.github.codetanzania.model.ServiceGroup;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class ServiceGroupItemsAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int i) {
-        return mServiceGroupItems.get(i).getServices().size();
+        return mServiceGroupItems.get(i).getOpen311Services().size();
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ServiceGroupItemsAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int gPos, int cPos) {
-        return mServiceGroupItems.get(gPos).getServices().get(cPos);
+        return mServiceGroupItems.get(gPos).getOpen311Services().get(cPos);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ServiceGroupItemsAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int gPos, int cPos, boolean isExpanded, View convertView, ViewGroup parent) {
-        String desc = ((Service)getChild(gPos, cPos)).description ;
+        String desc = ((Open311Service)getChild(gPos, cPos)).description ;
         if (convertView == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(R.layout.service_group_item, parent, false);

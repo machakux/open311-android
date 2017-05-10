@@ -25,7 +25,7 @@ public class ServiceRequestsAdapter extends
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_ITEM = 1;
 
-    /* A list of service requests by the civilian */
+    /* A list of open311Service requests by the civilian */
     private final List<ServiceRequest> mServiceRequests;
 
     /* Title of the issues */
@@ -66,8 +66,8 @@ public class ServiceRequestsAdapter extends
         } else if (holder instanceof ServiceRequestViewHolder) {
             ServiceRequest serviceRequest = this
                     .mServiceRequests.get(position);
-            ((ServiceRequestViewHolder)holder).tvServiceReqTitle.setText(serviceRequest.service.name);
-            ((ServiceRequestViewHolder)holder).tvServiceReqTicket.setText(String.format("%s, %s", serviceRequest.service.code, serviceRequest.address));
+            ((ServiceRequestViewHolder)holder).tvServiceReqTitle.setText(serviceRequest.open311Service.name);
+            ((ServiceRequestViewHolder)holder).tvServiceReqTicket.setText(String.format("%s, %s", serviceRequest.open311Service.code, serviceRequest.address));
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             String lastActionDateStr;
@@ -83,10 +83,10 @@ public class ServiceRequestsAdapter extends
 
             ((ServiceRequestViewHolder)holder).vwStatusView.setBackgroundColor(Color.parseColor(serviceRequest.status.color));
             ((ServiceRequestViewHolder)holder).tvServiceReqResolvedAt.setText(lastActionDateStr);
-            ((ServiceRequestViewHolder)holder).tvServiceReqCode.setText(serviceRequest.service.name.substring(0,2).toUpperCase());
+            ((ServiceRequestViewHolder)holder).tvServiceReqCode.setText(serviceRequest.open311Service.name.substring(0,2).toUpperCase());
 
             Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.bg_circular_lbl);
-            drawable.setColorFilter(Color.parseColor(serviceRequest.service.color), PorterDuff.Mode.MULTIPLY);
+            drawable.setColorFilter(Color.parseColor(serviceRequest.open311Service.color), PorterDuff.Mode.MULTIPLY);
             ((ServiceRequestViewHolder)holder).tvServiceReqCode.setBackground(drawable);
             ((ServiceRequestViewHolder)holder).bind(serviceRequest, ((ServiceRequestViewHolder)holder).crdTicketItem);
         }

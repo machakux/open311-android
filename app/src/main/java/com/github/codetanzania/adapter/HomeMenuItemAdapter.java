@@ -54,7 +54,7 @@ public class HomeMenuItemAdapter extends RecyclerView.Adapter<HomeMenuItemAdapte
         TextView mMenuItemContent;
         ImageView mMenuIcon;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             mMenuItem = itemView.findViewById(R.id.crd_MenuItem);
             mMenuItemContent = (TextView) itemView.findViewById(R.id.tv_MenuItemContent);

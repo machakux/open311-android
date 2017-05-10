@@ -49,6 +49,12 @@ public class Open311Api {
         Call<ResponseBody> signIn(@Body Map<String, String> reporter);
     }
 
+    public interface ServicesEndpoint {
+        @GET("/services")
+        @Headers({"Accept: application/json", "Content-Type: application/json"})
+        Call<ResponseBody> getAll(@Header("Authorization") String authHeader);
+    }
+
     public static class ServiceBuilder {
 
         private Context mContext;

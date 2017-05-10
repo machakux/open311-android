@@ -3,6 +3,7 @@ package com.github.codetanzania.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -12,16 +13,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class Util {
@@ -67,6 +71,19 @@ public class Util {
         } else {
             return mRunningMode == RunningMode.FIRST_TIME_UPGRADE && upgradeRun;
         }
+    }
+
+    public static File createImageFile(Context mContext) throws IOException {
+        // Create file that avoids name collisions
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String imageFileName = "JPEG_" + timestamp + "_";
+        File storageDir = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        // Save a file: path for use with ACTION_VIEW intents
+        return File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
     }
 
     public static Reporter getCurrentReporter(Context mContext) {
@@ -177,5 +194,11 @@ public class Util {
                 .edit()
                 .clear()
                 .apply();
+    }
+
+    public static <T> List<T> fromJsonString(String jsonStr) {
+        Gson gson = new GsonBuilder()
+                .create();
+        return gson.fromJson(jsonStr, new TypeToken<List<T>>() {}.getType());
     }
 }

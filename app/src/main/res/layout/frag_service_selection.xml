@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/ll_SelectOption"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -43,14 +43,14 @@
 
         </RadioGroup>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
     <LinearLayout
         android:id="@+id/ll_Services"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_below="@id/ll_SelectOption"
+        android:layout_alignParentTop="true"
         android:layout_marginTop="16dp">
 
         <TextView
@@ -64,13 +64,11 @@
             android:maxLines="1"
             android:ellipsize="end"/>
 
+        <!-- Render services that allows user to select one -->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_Services"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbarAlwaysDrawHorizontalTrack="true">
-
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

@@ -8,13 +8,13 @@ import java.util.Date;
 // @Table(name = "comment", id = BaseColumns._ID)
 public class Comment implements Parcelable {
 
-    public static final String SERVICE = "service";
+    public static final String SERVICE = "open311Service";
     public static final String COMMENTER = "commenter";
     public static final String TIMESTAMP = "timestamp";
     public static final String CONTENT = "content";
 
-    // @Column(name = "service", notNull = true)
-    public Service service;
+    // @Column(name = "open311Service", notNull = true)
+    public Open311Service open311Service;
 
     // @Column(name = "commentor", notNull = true)
     public String  commentor;
@@ -58,7 +58,7 @@ public class Comment implements Parcelable {
     @Override
     public String toString() {
         return "Comment{" +
-                "service=" + service +
+                "open311Service=" + open311Service +
                 ", commentor='" + commentor + '\'' +
                 ", timestamp=" + timestamp +
                 ", content='" + content + '\'' +

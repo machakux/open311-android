@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_OpenIssueTicket"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_capture_moment"/>
+
+        <fragment
+            android:id="@+id/frag_CapturePreview"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            android:name="com.github.codetanzania.ui.fragment.ImageCaptureFragment"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/borderlessButtonStyle"
+            android:drawableStart="@drawable/ic_mic_black_24dp"
+            android:gravity="center"
+            android:layout_gravity="start"
+            android:text="@string/action_capture_audio"/>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_IssueDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/text_issue_description" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_MeterNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.design.widget.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/iTxt_MeterNumber"
+                android:hint="@string/text_user_meter_number"/>
+
+        </android.support.design.widget.TextInputLayout>
+
+
+        <!-- This button is hidden until when location  -->
+        <Button
+            android:id="@+id/btn_Location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?attr/borderlessButtonStyle"
+            android:text="@string/text_select_location"
+            android:drawableStart="@drawable/ic_location_on_black_12dp"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_NextAction"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:gravity="end"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <Button
+            android:id="@+id/btn_NextAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_next"
+            style="?attr/borderlessButtonStyle"
+            android:drawableEnd="@drawable/ic_chevron_right_accent_24dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -43,15 +43,14 @@ public class SplashScreenActivity extends AppCompatActivity implements Callback<
         } else {
 
             // todo: remove the next hardcoded lines when the api is ready to work with phone numbers
-//            Map<String, String> map = new HashMap();
-//            map.put("email", "lallyelias87@gmail.com");
-//            map.put("password", "open311@qwerty");
-//            new Open311Api
-//                .ServiceBuilder(this)
-//                .build(Open311Api.AuthEndpoint.class)
-//                .signIn(map)
-//                .enqueue(this);
-            startActivity(new Intent(this, HomeMenuActivity.class));
+            Map<String, String> map = new HashMap();
+            map.put("email", "lallyelias87@gmail.com");
+            map.put("password", "open311@qwerty");
+            new Open311Api
+                .ServiceBuilder(this)
+                .build(Open311Api.AuthEndpoint.class)
+                .signIn(map)
+                .enqueue(this);
         }
     }
 
@@ -64,9 +63,9 @@ public class SplashScreenActivity extends AppCompatActivity implements Callback<
                 String jsonString = response.body().string();
                 String token = Util.parseJWTToken(jsonString);
                 Util.storeAuthToken(this, token);
-                // String userId = Util.parseUserId(jsonString);
-                // Log.d(TAG, "user identity is " + userId);
-                // Util.storeUserId(this, userId);
+                String userId = Util.parseUserId(jsonString);
+                Log.d(TAG, "user identity is " + userId);
+                Util.storeUserId(this, userId);
                 Log.d(TAG, "response body was " + token);
                 // go to issues
                 startActivity(new Intent(this, HomeMenuActivity.class));

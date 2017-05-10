@@ -7,11 +7,11 @@ import android.os.Parcelable;
 // @Table(name = "jurisdiction", id = BaseColumns._ID)
 public class Jurisdiction implements Parcelable {
 
-    public static final String CODE = "code";
-    public static final String NAME = "name";
-    public static final String DOMAIN = "domain";
-    public static final String ABOUT = "about";
-    public static final String LOCATION = "location";
+    public static final String CODE       = "code";
+    public static final String NAME       = "name";
+    public static final String DOMAIN     = "domain";
+    public static final String ABOUT      = "about";
+    public static final String LOCATION   = "location";
     public static final String BOUNDARIES = "boundaries";
 
     // @Column(name = "code", notNull = true, unique = true)

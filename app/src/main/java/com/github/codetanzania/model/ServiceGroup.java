@@ -14,15 +14,15 @@ public class ServiceGroup implements Parcelable {
     // @Column(name = "jurisdiction")
     public Jurisdiction jurisdiction;
 
-    // @Column(name = "services")
-    public List<Service> services;
+    // @Column(name = "open311Services")
+    public List<Open311Service> open311Services;
 
     public ServiceGroup() {}
 
     protected ServiceGroup(Parcel in) {
         name = in.readString();
         jurisdiction = in.readParcelable(Jurisdiction.class.getClassLoader());
-        services = in.createTypedArrayList(Service.CREATOR);
+        open311Services = in.createTypedArrayList(Open311Service.CREATOR);
     }
 
     public static final Creator<ServiceGroup> CREATOR = new Creator<ServiceGroup>() {
@@ -37,8 +37,8 @@ public class ServiceGroup implements Parcelable {
         }
     };
 
-    public List<Service> getServices() {
-        return services;
+    public List<Open311Service> getOpen311Services() {
+        return open311Services;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ServiceGroup implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(name);
         parcel.writeParcelable(jurisdiction, i);
-        parcel.writeTypedList(services);
+        parcel.writeTypedList(open311Services);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class ServiceGroup implements Parcelable {
         return "ServiceGroup{" +
                 "name='" + name + '\'' +
                 ", jurisdiction=" + jurisdiction +
-                ", services=" + services +
+                ", open311Services=" + open311Services +
                 '}';
     }
 }

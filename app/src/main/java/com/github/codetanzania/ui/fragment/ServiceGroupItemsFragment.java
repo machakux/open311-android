@@ -11,7 +11,7 @@ import android.widget.ExpandableListView;
 import com.github.codetanzania.adapter.ServiceGroupItemsAdapter;
 import com.github.codetanzania.model.Jurisdiction;
 import com.github.codetanzania.model.LongLat;
-import com.github.codetanzania.model.Service;
+import com.github.codetanzania.model.Open311Service;
 import com.github.codetanzania.model.ServiceGroup;
 
 import java.util.ArrayList;
@@ -66,31 +66,31 @@ public class ServiceGroupItemsFragment extends Fragment {
         jurisdiction.domain = "tz.co.codetanzania";
 
         group.jurisdiction = jurisdiction;
-        group.services = new ArrayList<>();
+        group.open311Services = new ArrayList<>();
 
-        Service service = new Service();
-        service.name = "Water Leakage";
-        service.description = "Report Water leakage. Can be due to vandalism or faulty infrastructure";
-        service.code = "WL";
-        group.services.add(service);
+        Open311Service open311Service = new Open311Service();
+        open311Service.name = "Water Leakage";
+        open311Service.description = "Report Water leakage. Can be due to vandalism or faulty infrastructure";
+        open311Service.code = "WL";
+        group.open311Services.add(open311Service);
 
-        service = new Service();
-        service.name = "Lack of Water";
-        service.description = "Report Lack of Water / Shortage of water";
-        service.code = "LW";
-        group.services.add(service);
+        open311Service = new Open311Service();
+        open311Service.name = "Lack of Water";
+        open311Service.description = "Report Lack of Water / Shortage of water";
+        open311Service.code = "LW";
+        group.open311Services.add(open311Service);
 
-        service = new Service();
-        service.name = "Water Theft";
-        service.description = "Report Water Theft";
-        service.code = "WT";
-        group.services.add(service);
+        open311Service = new Open311Service();
+        open311Service.name = "Water Theft";
+        open311Service.description = "Report Water Theft";
+        open311Service.code = "WT";
+        group.open311Services.add(open311Service);
 
-        service = new Service();
-        service.name = "Dirty Water";
-        service.description = "Report Dirty/ Untreated water";
-        service.code = "DW";
-        group.services.add(service);
+        open311Service = new Open311Service();
+        open311Service.name = "Dirty Water";
+        open311Service.description = "Report Dirty/ Untreated water";
+        open311Service.code = "DW";
+        group.open311Services.add(open311Service);
 
         groups.add(group);
 

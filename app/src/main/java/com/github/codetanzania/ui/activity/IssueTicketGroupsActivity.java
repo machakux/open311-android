@@ -89,26 +89,23 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.issues, menu);
-//        mSwitchCompat = menu.findItem(R.id.item_toggle_pending);
-//        final SwitchCompat switchCompat = (SwitchCompat) mSearchMenuItem.getActionView();
-//        mSearchMenuItem = menu.findItem(R.id.item_search);
-//        mUserProfileMenuItem = menu.findItem(R.id.item_user_acc);
-//        // default -- show resolved issues
-//        switchCompat.setChecked(true);
-//        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//
-//            }
-//        });
+        /*mSwitchCompat = menu.findItem(R.id.item_toggle_pending);
+        final SwitchCompat switchCompat = (SwitchCompat) mSearchMenuItem.getActionView();
+        mSearchMenuItem = menu.findItem(R.id.item_search);
+        mUserProfileMenuItem = menu.findItem(R.id.item_user_acc);
+        // default -- show resolved issues
+        switchCompat.setChecked(true);
+        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+            }
+        });*/
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            case R.id.item_user_acc:
-                startActivity(new Intent(this, CivilianProfileActivity.class));
-                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

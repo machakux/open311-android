@@ -26,7 +26,7 @@ public class IssueDetailsFragment extends Fragment {
     // makes sense to make this singleton since we don't have many data
     // private static IssueDetailsFragment self;
 
-    // reference to the service request
+    // reference to the open311Service request
     private ServiceRequest mServiceRequest;
 
     // reference to the recycler view. used to show attachments
@@ -61,7 +61,7 @@ public class IssueDetailsFragment extends Fragment {
         }
         tvReportTimestamp.setText(timestamp);
         TextView tvTicketTitle = (TextView) fragView.findViewById(R.id.tv_TicketTitle);
-        tvTicketTitle.setText(serviceRequest.service.name);
+        tvTicketTitle.setText(serviceRequest.open311Service.name);
         TextView tvLocation = (TextView) fragView.findViewById(R.id.tv_Location);
         tvLocation.setText(serviceRequest.jurisdiction.name);
         TextView tvDescription = (TextView) fragView.findViewById(R.id.tv_Description);

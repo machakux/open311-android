@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Citizen Feedback</string>
+    <string name="app_name">MajiFix</string>
     <string name="title_item_detail">Item Detail</string>
     <string name="et_phone_number">Enter phone number</string>
     <string name="action_next">Next</string>
@@ -9,7 +9,7 @@
     <string name="text_id_desc">Let the agency recognize you, maybe keep in touch!</string>
     <string name="text_zipCode">Zip code</string>
     <string name="action_startReport">Select Category</string>
-    <string name="enpoint_url">https://dawasco.herokuapp.com</string>
+    <string name="enpoint_url">http://dawasco.herokuapp.com</string>
     <string name="txt_loading">&#8230;</string>
     <string name="msg_server_error">Error loading data from the server</string>
     <string name="action_reload">Try Again</string>
@@ -54,13 +54,24 @@
     <string name="text_public_issue">Public Issue</string>
     <string name="text_private_issue">Private Issue</string>
     <string name="text_select_issue_category">Is the issue private or public?</string>
-    <string name="text_services">Select Issue/Service</string>
+    <string name="text_services">Select Service</string>
     <string name="text_user_account_number">Account Number</string>
     <string name="cam_preview">Camera Preview</string>
     <string name="text_capture_moment">Capture Picture Or Record Audio</string>
     <string name="action_capture_audio">Record Audio</string>
     <string name="text_issue_description">Short Descriptions</string>
-    <string name="text_issue_date">When did it start?</string>
+    <string name="text_issue_date">When did the issue start?</string>
+    <string name="text_select_location">Select location on map</string>
+    <string name="text_select_area">Select Area</string>
+    <string name="title_loading_services">Loading Services</string>
+    <string name="text_loading_services">Loading open311Services. Please wait&#8230;</string>
+    <string name="text_check_mark">✔</string>
+    <string name="text_confirm_exit">Any unsaved changes will be lost. Still you want to exit?</string>
+    <string name="action_confirm_exit">Yes, exit</string>
+    <string name="action_cancel_exit">Remain</string>
+    <string name="title_menu">Home</string>
+    <string name="text_fetch_location">Fetching Location</string>
+    <string name="text_fetch_location_error">Error fetching location.</string>
 
     <string-array name="duration_names">
         <item>Today</item>

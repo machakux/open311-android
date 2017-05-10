@@ -9,7 +9,9 @@
         android:id="@+id/tv_MenuItems"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello Moses, What do you want to do?"
+        android:text="@string/title_menu"
+        android:drawableStart="@drawable/ic_home_black_24dp"
+        android:drawablePadding="8dp"
         android:textSize="18sp"/>
 
     <android.support.v7.widget.RecyclerView

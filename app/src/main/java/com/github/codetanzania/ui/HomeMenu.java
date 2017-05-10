@@ -60,7 +60,7 @@ public class HomeMenu {
             this.title = title;
         }
 
-        public HomeMenuItemBuilder  applyTitle(String title) {
+        public HomeMenuItemBuilder setTitle(String title) {
             Log.d(TAG, "Applying Item Title " + title);
             this.title = title;
             return this;
@@ -71,7 +71,7 @@ public class HomeMenu {
             return this;
         }
 
-        public HomeMenuItemBuilder applyIconResourceId(int icon) {
+        public HomeMenuItemBuilder setIconResourceId(int icon) {
             this.icon = icon;
             return this;
         }
@@ -81,7 +81,7 @@ public class HomeMenu {
             return this;
         }
 
-        public HomeMenuItemBuilder overrideOnClickListener(OnClickListener listener) {
+        public HomeMenuItemBuilder setOnClickListener(OnClickListener listener) {
             this.listener = listener;
             return this;
         }
@@ -167,6 +167,7 @@ public class HomeMenu {
                     ClickEvent evt = new ClickEvent();
                     evt.item = HomeMenuItem.this;
                     evt.view = v;
+                    Log.d(TAG, "---- Click Performed ----");
                     listener.onClickPerformed(evt);
                 }
             });
