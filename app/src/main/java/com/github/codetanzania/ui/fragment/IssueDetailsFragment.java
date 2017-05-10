@@ -61,7 +61,7 @@ public class IssueDetailsFragment extends Fragment {
         }
         tvReportTimestamp.setText(timestamp);
         TextView tvTicketTitle = (TextView) fragView.findViewById(R.id.tv_TicketTitle);
-        tvTicketTitle.setText(serviceRequest.open311Service.name);
+        tvTicketTitle.setText(serviceRequest.service.name);
         TextView tvLocation = (TextView) fragView.findViewById(R.id.tv_Location);
         tvLocation.setText(serviceRequest.jurisdiction.name);
         TextView tvDescription = (TextView) fragView.findViewById(R.id.tv_Description);

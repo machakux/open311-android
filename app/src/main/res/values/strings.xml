@@ -72,6 +72,7 @@
     <string name="title_menu">Home</string>
     <string name="text_fetch_location">Fetching Location</string>
     <string name="text_fetch_location_error">Error fetching location.</string>
+    <string name="action_send">Send</string>
 
     <string-array name="duration_names">
         <item>Today</item>

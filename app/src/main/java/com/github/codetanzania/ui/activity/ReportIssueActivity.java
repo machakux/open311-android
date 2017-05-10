@@ -1,6 +1,5 @@
 package com.github.codetanzania.ui.activity;
 
-
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -38,6 +37,12 @@ import com.github.codetanzania.util.Util;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 
@@ -57,7 +62,9 @@ public class ReportIssueActivity extends AppCompatActivity implements
         Callback<ResponseBody>,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        ImageCaptureFragment.OnStartCapturePhoto {
+        ImageCaptureFragment.OnStartCapturePhoto,
+        OpenIssueTicketFragment.OnPrepareMap,
+        OnMapReadyCallback {
 
     private static final String TAG = "ReportIssueActivity";
 
@@ -80,6 +87,7 @@ public class ReportIssueActivity extends AppCompatActivity implements
     // reference to the views
     private Button mLocationBtn;
     private ImageView mImageView;
+    private GoogleMap mMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,14 +102,9 @@ public class ReportIssueActivity extends AppCompatActivity implements
         // load stuffs
         // show progress-dialog while we're loading data from the server.
         pDialog = ProgressDialog.show(this, getString(R.string.title_loading_services), getString(R.string.text_loading_services), true);
-        mLocationBtn = (Button) findViewById(R.id.btn_Location);
+        // mLocationBtn = (Button) findViewById(R.id.btn_Location);
         // now start load open311Service from the server
         loadServices();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -215,6 +218,12 @@ public class ReportIssueActivity extends AppCompatActivity implements
 
         // commit fragment
         commitFragment(frags[FRAG_OPEN_ISSUE_TICKET]);
+
+        // load map
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        // SupportMapFragment mapFragment = (SupportMapFragment)
+        // frags[FRAG_OPEN_ISSUE_TICKET].getChildFragmentManager().findFragmentById(R.id.map);
+        // mapFragment.getMapAsync(this);
     }
 
     // the callback to execute when location is retrieved
@@ -328,9 +337,44 @@ public class ReportIssueActivity extends AppCompatActivity implements
         sendBroadcast(mediaScanIntent);
     }
 
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        // Add a marker in Sydney and move the camera
+        LatLng sydney = new LatLng(-34, 151);
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Premise Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
 
     @Override
     public void startCapture(ImageView mImageView) {
         this.mImageView = mImageView;
+        dispatchTakePictureIntent();
+    }
+
+    @Override
+    public void prepare(SupportMapFragment supportMapFragment) {
+        if (supportMapFragment != null) {
+            supportMapFragment.getMapAsync(this);
+        } else {
+            SupportMapFragment smf =
+                    new SupportMapFragment();
+            // commit the map
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.frl_MapView, smf)
+                    .disallowAddToBackStack()
+                    .commitAllowingStateLoss();
+            smf.getMapAsync(this);
+        }
     }
 }

@@ -60,12 +60,17 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_tickets_group);
         mFrameLayout = (FrameLayout) findViewById(R.id.frl_TicketsActivity);
+
+        // show previous button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        loadServiceRequests();
     }
 
     @Override public void onResume() {
         super.onResume();
 
-        try {
+        /*try {
             // check if the application is installed for the first time or
             // if the reporter has not signed in yet.
             // if it is, then we start the verification activity (through OTP)
@@ -76,9 +81,7 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        loadServiceRequests();
+        }*/
     }
 
     @Override public void onPostCreate(Bundle savedInstanceState) {
@@ -89,33 +92,22 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.issues, menu);
-        /*mSwitchCompat = menu.findItem(R.id.item_toggle_pending);
-        final SwitchCompat switchCompat = (SwitchCompat) mSearchMenuItem.getActionView();
-        mSearchMenuItem = menu.findItem(R.id.item_search);
-        mUserProfileMenuItem = menu.findItem(R.id.item_user_acc);
-        // default -- show resolved issues
-        switchCompat.setChecked(true);
-        switchCompat.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-            }
-        });*/
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+
     /* show or hide menu items */
     private void showMenuItems(boolean show) {
-//        mSearchMenuItem.setVisible(show);
-//        mSwitchCompat.setVisible(show);
-        // mUserProfileMenuItem.setVisible(show);
     }
 
     private void loadServiceRequests() {
@@ -143,7 +135,7 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
         try {
             Open311Api.ServiceBuilder api = new Open311Api.ServiceBuilder(this);
             api.build(Open311Api.ServiceRequestEndpoint.class)
-                .getByUserId(queryParams, String.format("Bearer %s", token)).enqueue(this);
+                .getByUserId(String.format("Bearer %s", token), queryParams).enqueue(this);
 
         } catch (Exception e) {
             Log.e(TAG, "An error was " + e.getMessage());

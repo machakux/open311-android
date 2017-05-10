@@ -40,7 +40,7 @@ public class Open311Api {
 
         @GET("/servicerequests")
         @Headers({"Accept: application/json"})
-        Call<ResponseBody> getByUserId(@QueryName()String query, @Header("Authorization") String authorization);
+        Call<ResponseBody> getByUserId(@Header("Authorization") String authorization, @QueryName()String query);
     }
 
     public interface AuthEndpoint {

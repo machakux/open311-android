@@ -26,6 +26,8 @@ public class HomeMenuActivity extends AppCompatActivity implements HomeMenu.OnCl
             startActivity(new Intent(this, ReportIssueActivity.class));
         } else if (evt.item.getId() == CivilianFeedback.BROWSER_ISSUES_MENU_ITEM_POS) {
             startActivity(new Intent(this, IssueTicketGroupsActivity.class));
+        } else if (evt.item.getId() == CivilianFeedback.SETTINGS_MENU_ITEM_POS) {
+            startActivity(new Intent(this, CivilianProfileActivity.class));
         }
     }
 }

@@ -18,7 +18,7 @@ public class ServiceRequest implements Parcelable {
     public static final String _ID = "id";
     public static final String DESCRIPTION = "description";
     public static final String JURISDICTION = "jurisdiction";
-    public static final String SERVICE = "open311Service";
+    public static final String SERVICE = "service";
     public static final String REPORTER = "reporter";
     public static final String ADDRESS = "address";
     public static final String LONGITUDE = "longitude";
@@ -34,7 +34,7 @@ public class ServiceRequest implements Parcelable {
         id = in.readString();
         description = in.readString();
         jurisdiction = in.readParcelable(Jurisdiction.class.getClassLoader());
-        open311Service = in.readParcelable(Open311Service.class.getClassLoader());
+        service = in.readParcelable(Open311Service.class.getClassLoader());
         reporter = in.readParcelable(Reporter.class.getClassLoader());
         address = in.readString();
         longitude = in.readString();
@@ -71,7 +71,7 @@ public class ServiceRequest implements Parcelable {
         parcel.writeString(id);
         parcel.writeString(description);
         parcel.writeParcelable(jurisdiction, i);
-        parcel.writeParcelable(open311Service, i);
+        parcel.writeParcelable(service, i);
         parcel.writeParcelable(reporter, i);
         parcel.writeString(address);
         parcel.writeString(longitude);
@@ -145,7 +145,7 @@ public class ServiceRequest implements Parcelable {
     public Jurisdiction jurisdiction;
 
     // @Column(name = "open311Service")
-    public Open311Service open311Service;
+    public Open311Service service;
 
     // @Column(name = "reporter")
     public Reporter reporter;
@@ -191,7 +191,7 @@ public class ServiceRequest implements Parcelable {
     public String toString() {
         return "ServiceRequest{" +
                 "jurisdiction=" + jurisdiction +
-                ", open311Service=" + open311Service +
+                ", open311Service=" + service +
                 ", reporter=" + reporter +
                 ", address='" + address + '\'' +
                 ", longitude='" + longitude + '\'' +
