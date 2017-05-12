@@ -16,7 +16,7 @@ import com.github.codetanzania.adapter.Open311ServiceAdapter;
 import com.github.codetanzania.event.ClickListener;
 import com.github.codetanzania.event.RecyclerViewTouchListener;
 import com.github.codetanzania.model.Open311Service;
-import com.github.codetanzania.util.AppConfig;
+import com.github.codetanzania.Constants;
 
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class ServiceSelectionFragment extends Fragment {
     }
 
     private void bindView(View fragView) {
-        List<Open311Service> open311Services = getArguments().getParcelableArrayList(AppConfig.Const.SERVICE_LIST);
+        List<Open311Service> open311Services = getArguments().getParcelableArrayList(Constants.Const.SERVICE_LIST);
         Log.d(TAG, "List: " + open311Services);
         // recycler view
         RecyclerView rvServices = (RecyclerView) fragView.findViewById(R.id.rv_Services);

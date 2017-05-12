@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.github.codetanzania.adapter.AttachmentCardViewAdapter;
 import com.github.codetanzania.adapter.OnItemClickListener;
 import com.github.codetanzania.model.ServiceRequest;
-import com.github.codetanzania.util.AppConfig;
+import com.github.codetanzania.Constants;
 import com.github.codetanzania.util.Util;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class IssueDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View fragView, Bundle savedInstanceState) {
         Bundle args = getArguments();
-        ServiceRequest serviceRequest = args.getParcelable(AppConfig.Const.TICKET);
+        ServiceRequest serviceRequest = args.getParcelable(Constants.Const.TICKET);
 
         // bind data
         TextView tvTicketId = (TextView) fragView.findViewById(R.id.tv_TicketID);

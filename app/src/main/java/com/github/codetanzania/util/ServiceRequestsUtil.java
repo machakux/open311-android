@@ -1,11 +1,11 @@
 package com.github.codetanzania.util;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.github.codetanzania.Constants;
 import com.github.codetanzania.model.ServiceRequest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,17 +13,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +37,7 @@ public class ServiceRequestsUtil {
     public static final void save(Context ctx, ServiceRequest[] requests) {
         // save the requests to the shared preferences
         SharedPreferences mPrefs = ctx.getSharedPreferences(
-                AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+                Constants.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
     }
 
     public static SparseArray<ServiceRequest> fromJson(String json) throws IOException {

@@ -19,31 +19,43 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/text_capture_moment"/>
+                android:text="@string/text_capture_picture"/>
 
             <fragment
                 android:id="@+id/frag_CapturePreview"
                 android:layout_width="match_parent"
-                android:layout_height="175dp"
+                android:layout_height="300dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:name="com.github.codetanzania.ui.fragment.ImageCaptureFragment"/>
 
             <TextView
+                android:id="@+id/tv_CurrentLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btn_GetLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text_fetch_location"/>
+
+            <!--<TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingBottom="16dp"
-                android:text="@string/text_select_area" />
+                android:text="@string/text_select_area" />-->
 
             <!-- Map showing issue location -->
-            <FrameLayout
-                android:id="@+id/frl_MapView"
-                android:layout_width="match_parent"
-                android:layout_height="175dp">
+            <!--<FrameLayout-->
+                <!--android:id="@+id/frl_MapView"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="175dp">-->
 
-                <!-- Map will be rendered here -->
+                <!--&lt;!&ndash; Map will be rendered here &ndash;&gt;-->
 
-            </FrameLayout>
+            <!--</FrameLayout>-->
 
         </LinearLayout>
     </ScrollView>
@@ -53,24 +65,25 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="6"
+        android:weightSum="7"
         android:background="@android:color/white"
         android:layout_alignParentBottom="true"
         android:padding="8dp"
         android:gravity="end">
 
-        <android.support.design.widget.FloatingActionButton
+        <ImageButton
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:src="@drawable/ic_mic_black_24dp"
-            app:fabSize="mini"/>
+            style="?attr/borderlessButtonStyle"
+            android:layout_weight="1"
+            android:contentDescription="@string/text_record_audio" />
 
         <EditText
             android:id="@+id/et_Msg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:background="@null"
             android:padding="10dp"
             android:hint="@string/text_issue_description"/>

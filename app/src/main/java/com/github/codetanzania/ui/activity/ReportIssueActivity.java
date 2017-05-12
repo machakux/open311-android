@@ -1,20 +1,14 @@
 package com.github.codetanzania.ui.activity;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -23,26 +17,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.github.codetanzania.Constants;
 import com.github.codetanzania.api.Open311Api;
 import com.github.codetanzania.model.Open311Service;
 import com.github.codetanzania.ui.fragment.ImageCaptureFragment;
+import com.github.codetanzania.ui.fragment.JurisdictionsBottomSheetDialogFragment;
 import com.github.codetanzania.ui.fragment.OpenIssueTicketFragment;
 import com.github.codetanzania.ui.fragment.ServiceSelectionFragment;
-import com.github.codetanzania.util.AppConfig;
 import com.github.codetanzania.util.Util;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 
@@ -59,12 +44,9 @@ import tz.co.codetanzania.R;
 
 public class ReportIssueActivity extends AppCompatActivity implements
         ServiceSelectionFragment.OnSelectService,
+        OpenIssueTicketFragment.OnSelectAddress,
         Callback<ResponseBody>,
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        ImageCaptureFragment.OnStartCapturePhoto,
-        OpenIssueTicketFragment.OnPrepareMap,
-        OnMapReadyCallback {
+        ImageCaptureFragment.OnStartCapturePhoto {
 
     private static final String TAG = "ReportIssueActivity";
 
@@ -80,14 +62,7 @@ public class ReportIssueActivity extends AppCompatActivity implements
     // the progress dialog to show while we're loading data
     private ProgressDialog pDialog;
 
-    // the Google client APIs
-    private GoogleApiClient mGoogleApiClient;
-    private Location mLastLocation;
-
-    // reference to the views
-    private Button mLocationBtn;
     private ImageView mImageView;
-    private GoogleMap mMap;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,15 +80,6 @@ public class ReportIssueActivity extends AppCompatActivity implements
         // mLocationBtn = (Button) findViewById(R.id.btn_Location);
         // now start load open311Service from the server
         loadServices();
-    }
-
-    @Override
-    public void onStop() {
-        // disconnect from location service if possible
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.disconnect();
-        }
-        super.onStop();
     }
 
     @Override
@@ -139,8 +105,8 @@ public class ReportIssueActivity extends AppCompatActivity implements
     }
 
     private void loadServices() {
-        String authHeader = getSharedPreferences(AppConfig.Const.KEY_SHARED_PREFS, MODE_PRIVATE)
-                .getString(AppConfig.Const.AUTH_TOKEN, null);
+        String authHeader = getSharedPreferences(Constants.Const.KEY_SHARED_PREFS, MODE_PRIVATE)
+                .getString(Constants.Const.AUTH_TOKEN, null);
         Call<ResponseBody> call = new Open311Api.ServiceBuilder(this).build(Open311Api.ServicesEndpoint.class)
                 .getAll(authHeader);
         call.enqueue(this);
@@ -173,17 +139,19 @@ public class ReportIssueActivity extends AppCompatActivity implements
                 // commit the fragment
                 // insert fragment in order in which they will appear
                 Bundle args = new Bundle();
-                args.putParcelableArrayList(AppConfig.Const.SERVICE_LIST, (ArrayList<? extends Parcelable>) open311Services);
+                args.putParcelableArrayList(Constants.Const.SERVICE_LIST, (ArrayList<? extends Parcelable>) open311Services);
                 frags[FRAG_SELECT_ISSUE_CATEGORY] = ServiceSelectionFragment.getNewInstance(args);
                 frags[FRAG_OPEN_ISSUE_TICKET] = OpenIssueTicketFragment.getNewInstance(null);
                 // commit the first fragment
                 commitFragment(frags[FRAG_SELECT_ISSUE_CATEGORY]);
             } catch (IOException | JSONException exception) {
-                // todo: show an error message. fail safe by telling user we're closing the activity
+                Toast.makeText(this, "Error Processing Data", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
         } else {
-            // todo: show an error message. allow user to reload data if possible
+            Toast.makeText(this, "Invalid Request/Response", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 
@@ -201,72 +169,10 @@ public class ReportIssueActivity extends AppCompatActivity implements
     // when service is selected
     @Override
     public void onSelect(Open311Service open311Service) {
-
-        // show dialog
-        pDialog = new ProgressDialog(this);
-        pDialog.setMessage(getString(R.string.text_fetch_location));
-        pDialog.setIndeterminate(true);
-        pDialog.show();
-
-        // fetch last known location which is also the current location
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-        mGoogleApiClient.connect();
-
         // commit fragment
         commitFragment(frags[FRAG_OPEN_ISSUE_TICKET]);
-
-        // load map
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        // SupportMapFragment mapFragment = (SupportMapFragment)
-        // frags[FRAG_OPEN_ISSUE_TICKET].getChildFragmentManager().findFragmentById(R.id.map);
-        // mapFragment.getMapAsync(this);
     }
 
-    // the callback to execute when location is retrieved
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        // dismiss the dialog
-        pDialog.dismiss();
-
-        // fetch location
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        //mLocationBtn.setText(String.format(Locale.getDefault() ,"(Long: %.2f, Lat: %.2f)",
-        //        mLastLocation.getLongitude(), mLastLocation.getLatitude()));
-    }
-
-    // the callback to execute when connection fetching is suspended
-    @Override
-    public void onConnectionSuspended(int i) {
-        // dismiss the dialog
-        pDialog.dismiss();
-        // display a notification
-        Toast.makeText(
-                this, R.string.text_fetch_location_error, Toast.LENGTH_SHORT).show();
-    }
-
-    // the callback to execute when we cannot fetch the location
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        // dismiss the dialog
-        pDialog.dismiss();
-        // display a notification
-        Toast.makeText(
-                this, R.string.text_fetch_location_error, Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -337,23 +243,11 @@ public class ReportIssueActivity extends AppCompatActivity implements
         sendBroadcast(mediaScanIntent);
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Premise Location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    // open bottom sheet. Used to collect address
+    private void openLocationBottomSheet(Bundle bundle) {
+        JurisdictionsBottomSheetDialogFragment jbsDialog =
+                JurisdictionsBottomSheetDialogFragment.getNewInstance(bundle);
+        jbsDialog.show(getSupportFragmentManager(), jbsDialog.getTag());
     }
 
     @Override
@@ -363,18 +257,7 @@ public class ReportIssueActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void prepare(SupportMapFragment supportMapFragment) {
-        if (supportMapFragment != null) {
-            supportMapFragment.getMapAsync(this);
-        } else {
-            SupportMapFragment smf =
-                    new SupportMapFragment();
-            // commit the map
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.frl_MapView, smf)
-                    .disallowAddToBackStack()
-                    .commitAllowingStateLoss();
-            smf.getMapAsync(this);
-        }
+    public void selectAddress(Bundle args) {
+        openLocationBottomSheet(args);
     }
 }

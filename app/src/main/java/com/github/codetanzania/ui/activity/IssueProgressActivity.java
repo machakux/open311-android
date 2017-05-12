@@ -18,7 +18,7 @@ import com.github.codetanzania.ui.fragment.InternalNoteFragment;
 import com.github.codetanzania.ui.fragment.IssueDetailsFragment;
 import com.github.codetanzania.model.Comment;
 import com.github.codetanzania.model.ServiceRequest;
-import com.github.codetanzania.util.AppConfig;
+import com.github.codetanzania.Constants;
 
 import java.util.ArrayList;
 
@@ -36,7 +36,7 @@ public class IssueProgressActivity extends AppCompatActivity /*implements OnMapR
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue_progress);
-        mServiceRequest = getIntent().getExtras().getParcelable(AppConfig.Const.TICKET);
+        mServiceRequest = getIntent().getExtras().getParcelable(Constants.Const.TICKET);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -113,7 +113,7 @@ public class IssueProgressActivity extends AppCompatActivity /*implements OnMapR
                 selfComment.content = mServiceRequest.description;
                 mServiceRequest.comments.add(selfComment);
                 Bundle bundle = new Bundle();
-                bundle.putParcelableArrayList(AppConfig.Const.ISSUE_COMMENTS, (ArrayList<? extends Parcelable>) mServiceRequest.comments);
+                bundle.putParcelableArrayList(Constants.Const.ISSUE_COMMENTS, (ArrayList<? extends Parcelable>) mServiceRequest.comments);
                 return InternalNoteFragment.getInstance(bundle);
             } else if (position == GOOGLE_MAP_FRAG_POS) {
                 return new GoogleMapFragment();

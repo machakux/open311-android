@@ -20,7 +20,7 @@ import com.github.codetanzania.ui.fragment.ProgressBarFragment;
 import com.github.codetanzania.ui.fragment.ServiceRequestsFragment;
 import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.model.ServiceRequest;
-import com.github.codetanzania.util.AppConfig;
+import com.github.codetanzania.Constants;
 import com.github.codetanzania.util.ServiceRequestsUtil;
 import com.github.codetanzania.util.Util;
 
@@ -273,7 +273,7 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
         // preview the item which was clicked
         Intent theIntent = new Intent(this, IssueProgressActivity.class);
         Bundle theBundle = new Bundle();
-        theBundle.putParcelable(AppConfig.Const.TICKET, theItem);
+        theBundle.putParcelable(Constants.Const.TICKET, theItem);
         theIntent.putExtras(theBundle);
         // bundle the intent
         // start the activity

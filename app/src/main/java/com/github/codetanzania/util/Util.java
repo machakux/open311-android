@@ -7,21 +7,18 @@ import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.github.codetanzania.Constants;
 import com.github.codetanzania.model.Jurisdiction;
 import com.github.codetanzania.model.Reporter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -54,16 +51,16 @@ public class Util {
         }
 
         SharedPreferences sharedPrefs = mContext
-                .getSharedPreferences(AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+                .getSharedPreferences(Constants.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
 
-        savedVersionCode = sharedPrefs.getInt(AppConfig.Const.APP_VERSION_CODE, -1);
+        savedVersionCode = sharedPrefs.getInt(Constants.Const.APP_VERSION_CODE, -1);
 
         boolean firstTimeRun = savedVersionCode == -1;
         boolean upgradeRun   = savedVersionCode <  currentVersionCode;
 
         if (firstTimeRun || upgradeRun) {
             sharedPrefs.edit().putInt(
-                    AppConfig.Const.APP_VERSION_CODE, currentVersionCode).apply();
+                    Constants.Const.APP_VERSION_CODE, currentVersionCode).apply();
         }
 
         if (mRunningMode == RunningMode.FIRST_TIME_INSTALL) {
@@ -88,17 +85,17 @@ public class Util {
 
     public static Reporter getCurrentReporter(Context mContext) {
         SharedPreferences sharedPrefs = mContext.getSharedPreferences(
-                AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
-        String phone = sharedPrefs.getString(AppConfig.Const.REPORTER_PHONE, null);
+                Constants.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+        String phone = sharedPrefs.getString(Constants.Const.REPORTER_PHONE, null);
 
         // logical to use phone number which we verify through OTP
         if (phone == null) {
             return null;
         }
 
-        String email = sharedPrefs.getString(AppConfig.Const.REPORTER_EMAIL, null);
-        String account = sharedPrefs.getString(AppConfig.Const.REPORTER_DAWASCO_ACCOUNT, null);
-        String fullName = sharedPrefs.getString(AppConfig.Const.REPORTER_NAME, null);
+        String email = sharedPrefs.getString(Constants.Const.REPORTER_EMAIL, null);
+        String account = sharedPrefs.getString(Constants.Const.REPORTER_DAWASCO_ACCOUNT, null);
+        String fullName = sharedPrefs.getString(Constants.Const.REPORTER_NAME, null);
 
         Reporter reporter = new Reporter();
         reporter.account = account;
@@ -111,36 +108,36 @@ public class Util {
 
     public static void storeCurrentReporter(Context mContext, Reporter reporter) {
         SharedPreferences sharedPrefs = mContext.getSharedPreferences(
-                AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+                Constants.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
         sharedPrefs.edit()
-                .putString(AppConfig.Const.REPORTER_NAME, reporter.name)
-                .putString(AppConfig.Const.REPORTER_PHONE, reporter.phone)
-                .putString(AppConfig.Const.REPORTER_EMAIL, reporter.email)
-                .putString(AppConfig.Const.REPORTER_DAWASCO_ACCOUNT, reporter.account)
+                .putString(Constants.Const.REPORTER_NAME, reporter.name)
+                .putString(Constants.Const.REPORTER_PHONE, reporter.phone)
+                .putString(Constants.Const.REPORTER_EMAIL, reporter.email)
+                .putString(Constants.Const.REPORTER_DAWASCO_ACCOUNT, reporter.account)
                 .apply();
     }
 
     public static void storeAuthToken(Context mContext, String mToken) {
-        SharedPreferences sharedPrefs = mContext.getSharedPreferences(AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences sharedPrefs = mContext.getSharedPreferences(Constants.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
             sharedPrefs.edit()
-                    .putString(AppConfig.Const.AUTH_TOKEN, mToken)
+                    .putString(Constants.Const.AUTH_TOKEN, mToken)
                     .apply();
     }
 
     public static String getCurrentUserId(Context mContext) {
-        SharedPreferences mPrefs = mContext.getSharedPreferences(AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
-        return mPrefs.getString(AppConfig.Const.CURRENT_USER_ID, null);
+        SharedPreferences mPrefs = mContext.getSharedPreferences(Constants.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+        return mPrefs.getString(Constants.Const.CURRENT_USER_ID, null);
     }
 
     public static String getAuthToken(Context mContext) {
-        SharedPreferences mPrefs = mContext.getSharedPreferences(AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
-        return mPrefs.getString(AppConfig.Const.AUTH_TOKEN, null);
+        SharedPreferences mPrefs = mContext.getSharedPreferences(Constants.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+        return mPrefs.getString(Constants.Const.AUTH_TOKEN, null);
     }
 
     public static void storeUserId(Context mContext, String mUserId) {
-        SharedPreferences mPrefs = mContext.getSharedPreferences(AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences mPrefs = mContext.getSharedPreferences(Constants.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
         mPrefs.edit()
-                .putString(AppConfig.Const.CURRENT_USER_ID, mUserId)
+                .putString(Constants.Const.CURRENT_USER_ID, mUserId)
                 .apply();
     }
 
@@ -190,7 +187,7 @@ public class Util {
 
     public static void resetPreferences(Context mContext) {
         mContext.getSharedPreferences(
-                AppConfig.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE)
+                Constants.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE)
                 .edit()
                 .clear()
                 .apply();

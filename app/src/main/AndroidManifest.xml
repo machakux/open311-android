@@ -23,6 +23,18 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <!--
+            We need to do reverse geo-coding. The process which takes longer to complete,
+            kinda makes it unsuitable to use in UI thread. AsyncTask would do it, but consider
+            simple scenarios which might make the requested to be cancelled/re-issued un-necessarily
+            such as screen rotation.
+
+            Using IntentService seems our best bet. And here we go
+        -->
+        <service android:name="com.github.codetanzania.service.FetchAddressIntentService"
+            android:exported="false"/>
+
+
+        <!--
             The Application targeting Android 7.0+, passing file://<path> URIs across package boundary
             causes a FileUriExposedException (Reasonably ok to conceal app internals). In such occasion,
             choosing FileProvider to pass the URIs across boundaries is not an option.
