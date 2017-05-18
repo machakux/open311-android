@@ -17,6 +17,15 @@ import tz.co.codetanzania.R;
 
 public class EditProfileActivity extends AppCompatActivity {
 
+    // reference to the views
+    private EditText etAccountNumber;
+    private EditText etZipCode;
+    private EditText etPhoneNumber;
+    private EditText etUserEmail;
+    private EditText etUserName;
+
+    private Reporter mReporter;
+
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // set content view
@@ -28,36 +37,35 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void bindDataToViews() {
-        Reporter reporter = Util.getCurrentReporter(this);
-        // todo: uncomment next line when Reporter#meterNumber is implemented
+        mReporter = Util.getCurrentReporter(this);
         // EditText etMeterNumber = (EditText) findViewById(R.id.et_MeterNumber);
-        EditText etAccountNumber = (EditText) findViewById(R.id.et_AccountNumber);
-        EditText etZipCode = (EditText) findViewById(R.id.et_ZipCode);
-        EditText etPhoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
-        EditText etUserEmail = (EditText) findViewById(R.id.et_UserEmail);
-        EditText etUserName = (EditText) findViewById(R.id.et_userName);
+        etAccountNumber = (EditText) findViewById(R.id.et_AccountNumber);
+        etZipCode = (EditText) findViewById(R.id.et_ZipCode);
+        etPhoneNumber = (EditText) findViewById(R.id.et_phoneNumber);
+        etUserEmail = (EditText) findViewById(R.id.et_UserEmail);
+        etUserName = (EditText) findViewById(R.id.et_userName);
 
-        assert reporter != null;
+        assert mReporter != null;
         // now ...
-        if (!TextUtils.isEmpty(reporter.account)) {
-            etAccountNumber.setText(reporter.account);
+        if (!TextUtils.isEmpty(mReporter.account)) {
+            etAccountNumber.setText(mReporter.account);
         }
 
-        if (!TextUtils.isEmpty(reporter.phone)) {
-            if (reporter.phone.startsWith("255")) {
-                etZipCode.setText(reporter.phone.substring(0, 3));
-                etPhoneNumber.setText(reporter.phone.substring(3));
+        if (!TextUtils.isEmpty(mReporter.phone)) {
+            if (mReporter.phone.startsWith("255")) {
+                etZipCode.setText(mReporter.phone.substring(0, 3));
+                etPhoneNumber.setText(mReporter.phone.substring(3));
             } else {
-                etPhoneNumber.setText(reporter.phone);
+                etPhoneNumber.setText(mReporter.phone);
             }
         }
 
-        if (!TextUtils.isEmpty(reporter.name)) {
-            etUserName.setText(reporter.name);
+        if (!TextUtils.isEmpty(mReporter.name)) {
+            etUserName.setText(mReporter.name);
         }
 
-        if (!TextUtils.isEmpty(reporter.email)) {
-            etUserEmail.setText(reporter.email);
+        if (!TextUtils.isEmpty(mReporter.email)) {
+            etUserEmail.setText(mReporter.email);
         }
     }
 
@@ -74,9 +82,21 @@ public class EditProfileActivity extends AppCompatActivity {
         View fab = findViewById(R.id.fab_EditProfile);
         fab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Snackbar.make(view, "Updating your profile...", Snackbar.LENGTH_LONG)
-                        .setAction("Hide", null).show();
-                // todo: post data to the server
+                mReporter.account = etAccountNumber.getText().toString();
+                mReporter.email   = etUserEmail.getText().toString();
+                mReporter.name    = etUserName.getText().toString();
+
+                // phone number is made up of country's dial up code + msisdn
+                if (etPhoneNumber.getText() != null) {
+                    if (etZipCode.getText() != null) {
+                        mReporter.phone = etZipCode.getText().toString().concat(etPhoneNumber.getText().toString());
+                    } else {
+                        mReporter.phone = etPhoneNumber.getText().toString();
+                    }
+                }
+
+                Util.storeCurrentReporter(EditProfileActivity.this, mReporter);
+
             }
         });
     }

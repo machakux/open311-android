@@ -90,49 +90,22 @@
 
     </LinearLayout>
 
-    <!-- Meter number and account number -->
-    <LinearLayout
-        android:id="@+id/ll_UserAccount"
-        android:layout_width="match_parent"
+    <!-- account number -->
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_AccountNumber"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1"
-        android:layout_marginTop="32dp"
-        android:baselineAligned="false">
+        android:layout_weight="0.5"
+        app:hintTextAppearance="@style/StyledEditTextTheme"
+        android:textColorHint="#c1c2c4">
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="0dp"
+        <EditText
+            android:id="@+id/et_AccountNumber"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            app:hintTextAppearance="@style/StyledEditTextTheme"
-            android:textColorHint="#c1c2c4">
+            android:hint="@string/et_account_number"
+            android:inputType="number"/>
 
-            <EditText
-                android:id="@+id/et_MeterNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:hint="@string/et_meter_number"/>
-
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/til_AccountNumber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            app:hintTextAppearance="@style/StyledEditTextTheme"
-            android:textColorHint="#c1c2c4">
-
-            <EditText
-                android:id="@+id/et_AccountNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/et_account_number"
-                android:inputType="number"/>
-
-        </android.support.design.widget.TextInputLayout>
-
-    </LinearLayout>
+    </android.support.design.widget.TextInputLayout>
 
 </merge>
