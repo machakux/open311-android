@@ -34,6 +34,10 @@ public class Open311Api {
     }
 
     public interface ServiceRequestEndpoint {
+        @POST("/servicerequests")
+        @Headers({"Content-Type: application/json"})
+        public Call<ResponseBody> openTicket(@Header("Authorization") String authorization, @Body Map<String, Object> body);
+
         @GET("/servicerequests")
         @Headers({"Accept: application/json"})
         Call<ServiceRequests> getByUserId(/*@Header("Authorization")*/String jwtToken);

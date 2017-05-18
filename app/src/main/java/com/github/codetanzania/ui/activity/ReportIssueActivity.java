@@ -61,7 +61,7 @@ public class ReportIssueActivity extends AppCompatActivity implements
 
     // the progress dialog to show while we're loading data
     private ProgressDialog pDialog;
-
+    JurisdictionsBottomSheetDialogFragment jbsDialog;
     private ImageView mImageView;
 
     @Override
@@ -75,10 +75,6 @@ public class ReportIssueActivity extends AppCompatActivity implements
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_black_24dp);
 
         // load stuffs
-        // show progress-dialog while we're loading data from the server.
-        pDialog = ProgressDialog.show(this, getString(R.string.title_loading_services), getString(R.string.text_loading_services), true);
-        // mLocationBtn = (Button) findViewById(R.id.btn_Location);
-        // now start load open311Service from the server
         loadServices();
     }
 
@@ -111,6 +107,8 @@ public class ReportIssueActivity extends AppCompatActivity implements
                 .getAll(authHeader);
         call.enqueue(this);
         Log.d(TAG, "----LOADING DATA FROM SRV----");
+        // show progress-dialog while we're loading data from the server.
+        pDialog = ProgressDialog.show(this, getString(R.string.title_loading_services), getString(R.string.text_loading_services), true);
     }
 
     // commit the fragment
@@ -245,8 +243,14 @@ public class ReportIssueActivity extends AppCompatActivity implements
 
     // open bottom sheet. Used to collect address
     private void openLocationBottomSheet(Bundle bundle) {
-        JurisdictionsBottomSheetDialogFragment jbsDialog =
-                JurisdictionsBottomSheetDialogFragment.getNewInstance(bundle);
+        if (jbsDialog == null) {
+            jbsDialog =
+                    JurisdictionsBottomSheetDialogFragment.getNewInstance(bundle);
+            jbsDialog.setCancelable(false);
+        } else {
+            jbsDialog.setArguments(bundle);
+        }
+
         jbsDialog.show(getSupportFragmentManager(), jbsDialog.getTag());
     }
 

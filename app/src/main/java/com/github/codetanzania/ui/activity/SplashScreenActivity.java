@@ -41,7 +41,6 @@ public class SplashScreenActivity extends AppCompatActivity implements Callback<
             startActivity(new Intent(this, IDActivity.class));
             finish();
         } else {
-
             // todo: remove the next hardcoded lines when the api is ready to work with phone numbers
             Map<String, String> map = new HashMap();
             map.put("email", "lallyelias87@gmail.com");

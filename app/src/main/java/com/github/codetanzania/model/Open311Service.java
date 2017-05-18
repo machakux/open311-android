@@ -21,16 +21,13 @@ import java.util.List;
 // @Table(name = "open311Service", id = BaseColumns._ID)
 public class Open311Service implements Parcelable {
 
+    public transient static final String ID   = "id";
     public transient static final String CODE = "code";
     public transient static final String NAME = "name";
     public transient static final String DESCRIPTION = "description";
     public transient static final String COLOR = "color";
 
-    // Indices used to parse from JSON, or database record during de-serialization
-    /*private transient static int CODE_IDX;
-    private transient static int NAME_IDX;
-    private transient static int DESCRIPTION_IDX;
-    private transient static int COLOR_IDX;*/
+    public String id;
 
     // @Column(name = "code")
     public String code;
@@ -47,6 +44,7 @@ public class Open311Service implements Parcelable {
     public Open311Service() {}
 
     protected Open311Service(Parcel in) {
+        id   = in.readString();
         code = in.readString();
         name = in.readString();
         description = in.readString();
@@ -63,6 +61,7 @@ public class Open311Service implements Parcelable {
         for (int i = 0; i < jsonArray.length(); ++i) {
             JSONObject obj = jsonArray.getJSONObject(i);
             Open311Service open311Service = new Open311Service();
+            open311Service.id   = obj.getString(ID);
             open311Service.name = obj.getString(NAME);
             open311Service.code = obj.getString(CODE);
             open311Service.description = obj.getString(DESCRIPTION);
@@ -96,6 +95,7 @@ public class Open311Service implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
         parcel.writeString(code);
         parcel.writeString(name);
         parcel.writeString(description);
@@ -105,6 +105,7 @@ public class Open311Service implements Parcelable {
     @Override
     public String toString() {
         return "Open311Service{" +
+                "id='" + id + '\'' +
                 "code='" + code + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +

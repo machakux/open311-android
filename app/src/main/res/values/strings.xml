@@ -79,10 +79,11 @@
     <string name="address_found">Address Found</string>
     <string name="text_record_audio">Record Audio</string>
     <string name="text_get_location">Get Location</string>
-    <string name="text_curr_location">Current Location: %1$s (lat: %2$s, long: %3$s)</string>
+    <string name="text_curr_location">%1$s (lat: %2$s, long: %3$s)</string>
     <string name="no_geocoder_available">No Geo-coder Available</string>
-    <string name="text_fetch_location"><![CDATA[Fetch Current Location&#8230;]]></string>
+    <string name="text_fetch_location">Fetch Current Location&#8230;</string>
     <string name="accept_location">Use Location</string>
+    <string name="title_curren_location">Current Location</string>
 
     <string-array name="duration_names">
         <item>Today</item>

@@ -121,6 +121,12 @@ public class OpenIssueTicketFragment extends Fragment implements
         fetchAddressIntent.putExtra(Constants.LOCATION_DATA_EXTRA, mLastLocation);
         fetchAddressIntent.putExtra(Constants.RECEIVER, mAddressReceiver);
         getActivity().startService(fetchAddressIntent);
+
+        // show dialog
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setMessage(getString(R.string.text_fetching_location));
+        pDialog.setIndeterminate(true);
+        pDialog.show();
     }
 
     @Override
@@ -160,12 +166,6 @@ public class OpenIssueTicketFragment extends Fragment implements
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // show dialog
-        pDialog = new ProgressDialog(getActivity());
-        pDialog.setMessage(getString(R.string.text_fetching_location));
-        pDialog.setIndeterminate(true);
-        pDialog.show();
-
         // fetch last known location which is also the current location
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
                 .addConnectionCallbacks(this)
@@ -177,7 +177,7 @@ public class OpenIssueTicketFragment extends Fragment implements
 
     @Override public void onViewCreated(View fragView, Bundle savedInstanceState) {
         this.mTextViewCurrentLocation = (TextView) fragView.findViewById(R.id.tv_CurrentLocation);
-        this.mTextViewCurrentLocation.setText(R.string.text_fetching_location);
+        this.mTextViewCurrentLocation.setText(R.string.text_empty_location);
         this.mBtnGetLocation = (Button) fragView.findViewById(R.id.btn_GetLocation);
         this.mBtnGetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,10 +211,14 @@ public class OpenIssueTicketFragment extends Fragment implements
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             // Show a toast message if an address was found.
             if (resultCode == Constants.SUCCESS_RESULT) {
+                pDialog.dismiss();
+                updateUIWidgets(false);
                 displayAddressOutput(resultData);
                 Toast.makeText(getActivity(), R.string.address_found, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), R.string.text_fetch_location_error, Toast.LENGTH_SHORT).show();
+                pDialog.dismiss();
+                updateUIWidgets(false);
             }
         }
     }

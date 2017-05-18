@@ -127,7 +127,7 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
         String token = Util.getAuthToken(this);
         Reporter reporter = Util.getCurrentReporter(this);
         assert reporter != null;
-        String queryParams = String.format("{\"reporter.phone\":\"%s\"}", "255765952971");
+        String queryParams = String.format("{\"reporter.phone\":\"%s\"}", Util.getCurrentReporter(this).phone);
         Log.e(TAG, queryParams);
         assert token != null;
 
