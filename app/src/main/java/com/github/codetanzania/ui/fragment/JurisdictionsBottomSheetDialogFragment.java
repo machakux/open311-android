@@ -1,6 +1,7 @@
 package com.github.codetanzania.ui.fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,6 +35,12 @@ public class JurisdictionsBottomSheetDialogFragment extends BottomSheetDialogFra
     private Location mLocation;
     private String   mAddress;
 
+    public interface OnAcceptAddress {
+        void selectedAddress(Bundle locationData);
+    }
+
+    private OnAcceptAddress mOnAcceptAddress;
+
     private BottomSheetBehavior.BottomSheetCallback behaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
         @Override
         public void onStateChanged(@NonNull View bottomSheet, int newState) {
@@ -66,6 +73,11 @@ public class JurisdictionsBottomSheetDialogFragment extends BottomSheetDialogFra
         return instance;
     }
 
+    @Override public void onAttach(Context ctx) {
+        super.onAttach(ctx);
+        mOnAcceptAddress = (OnAcceptAddress) ctx;
+    }
+
     @Override public void onResume() {
         super.onResume();
 
@@ -88,6 +100,17 @@ public class JurisdictionsBottomSheetDialogFragment extends BottomSheetDialogFra
         super.setupDialog(dialog, style);
         View contentView = View.inflate(getContext(), R.layout.frag_location_content, null);
 
+        contentView.findViewById(R.id.btn_AcceptLocation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: update selected location
+                Bundle locationBundle = new Bundle();
+                locationBundle.putParcelable(Constants.LOCATION_DATA_EXTRA, mLocation);
+                locationBundle.putString(Constants.RESULT_DATA_KEY, mAddress);
+                mOnAcceptAddress.selectedAddress(locationBundle);
+            }
+        });
+
         dialog.setContentView(contentView);
 
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)((View)contentView.getParent()).getLayoutParams();
@@ -98,10 +121,6 @@ public class JurisdictionsBottomSheetDialogFragment extends BottomSheetDialogFra
         if ( behavior != null && behavior instanceof BottomSheetBehavior ) {
             ((BottomSheetBehavior) behavior).setBottomSheetCallback(behaviorCallback);
         }
-    }
-
-    @Override public void onViewCreated(View contentView, Bundle savedInstanceState) {
-
     }
 
     @Override

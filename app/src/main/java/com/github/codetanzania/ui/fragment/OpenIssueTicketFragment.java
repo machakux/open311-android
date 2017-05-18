@@ -14,23 +14,29 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.codetanzania.Constants;
+import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.service.FetchAddressIntentService;
 import com.github.codetanzania.ui.activity.ReportIssueActivity;
+import com.github.codetanzania.util.Util;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.SupportMapFragment;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import tz.co.codetanzania.R;
 
@@ -46,6 +52,7 @@ public class OpenIssueTicketFragment extends Fragment implements
     // flag used to resolve async conflicts
     private boolean mAddressRequested = false;
 
+    // reference to the views
     private TextView mTextViewCurrentLocation;
     private Button mBtnGetLocation;
     private ProgressDialog pDialog;
@@ -56,7 +63,18 @@ public class OpenIssueTicketFragment extends Fragment implements
         void selectAddress(Bundle args);
     }
 
+    public interface OnPostIssue {
+        /**
+         * Opens new issue to DAWASCO.
+         * @param issueMap a map without location. The implementation must
+         *                 add location before posting
+         */
+        void doPost(Map<String, Object> issueMap);
+    }
+
     private OnSelectAddress onSelectAddress;
+
+    private OnPostIssue onPostIssue;
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -152,7 +170,17 @@ public class OpenIssueTicketFragment extends Fragment implements
 
     @Override public void onAttach(Context mContext) {
         super.onAttach(mContext);
+
+        if (!(mContext instanceof OnSelectAddress)) {
+            throw new IllegalStateException("OnOpenIssueTicketFragment's attached context must also implement OnOpenIssueTicketFragment#OnSelectAddress interface");
+        }
+
+        if (!(mContext instanceof OnPostIssue)) {
+            throw new IllegalStateException("OnOpenIssueTicketFragment's attached context must also implement OnOpenIssueTicketFragment#OnPostIssue interface");
+        }
+
         onSelectAddress = (OnSelectAddress) mContext;
+        onPostIssue     = (OnPostIssue) mContext;
     }
 
     @Override public void onStop() {
@@ -179,10 +207,39 @@ public class OpenIssueTicketFragment extends Fragment implements
         this.mTextViewCurrentLocation = (TextView) fragView.findViewById(R.id.tv_CurrentLocation);
         this.mTextViewCurrentLocation.setText(R.string.text_empty_location);
         this.mBtnGetLocation = (Button) fragView.findViewById(R.id.btn_GetLocation);
+        final EditText editTextMsg = (EditText) fragView.findViewById(R.id.et_Msg);
         this.mBtnGetLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fetchAddressButtonHandler(v);
+            }
+        });
+        fragView.findViewById(R.id.btn_OpenIssue).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Map<String, Object> issueBody = new HashMap<>();
+
+                // reporter
+                Reporter reporter = Util.getCurrentReporter(getActivity());
+                Map<String, String> reporterData = new HashMap<String, String>();
+                reporterData.put(Reporter.NAME, reporter.name);
+                reporterData.put(Reporter.PHONE, reporter.phone);
+                issueBody.put("reporter", reporterData);
+
+                // issue description
+                String issueDescription = editTextMsg.getText().toString();
+                // avoid posting issue withoug descriptions
+                if (TextUtils.isEmpty(issueDescription)) {
+                    Toast.makeText(getActivity(), R.string.warning_empty_issue_body, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // pack description into the issue's body
+                issueBody.put("description", issueDescription);
+
+                // call the implementation. Note that, the implementation is liable for
+                // pre-filling extra details such as address & location where the issue has occurred,
+                // image data or sound data describing the issue
+                onPostIssue.doPost(issueBody);
             }
         });
     }

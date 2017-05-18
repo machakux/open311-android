@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -15,14 +16,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.github.codetanzania.Constants;
 import com.github.codetanzania.api.Open311Api;
 import com.github.codetanzania.model.Open311Service;
+import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.ui.fragment.ImageCaptureFragment;
 import com.github.codetanzania.ui.fragment.JurisdictionsBottomSheetDialogFragment;
 import com.github.codetanzania.ui.fragment.OpenIssueTicketFragment;
@@ -34,7 +38,9 @@ import org.json.JSONException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -45,7 +51,9 @@ import tz.co.codetanzania.R;
 public class ReportIssueActivity extends AppCompatActivity implements
         ServiceSelectionFragment.OnSelectService,
         OpenIssueTicketFragment.OnSelectAddress,
+        OpenIssueTicketFragment.OnPostIssue,
         Callback<ResponseBody>,
+        JurisdictionsBottomSheetDialogFragment.OnAcceptAddress,
         ImageCaptureFragment.OnStartCapturePhoto {
 
     private static final String TAG = "ReportIssueActivity";
@@ -61,8 +69,14 @@ public class ReportIssueActivity extends AppCompatActivity implements
 
     // the progress dialog to show while we're loading data
     private ProgressDialog pDialog;
-    JurisdictionsBottomSheetDialogFragment jbsDialog;
+    private JurisdictionsBottomSheetDialogFragment jbsDialog;
     private ImageView mImageView;
+    // location
+    private Map<String, Double[]> mLocationMap;
+    // address
+    private String mLocationAddress;
+    // Service
+    private String mServiceId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,6 +181,8 @@ public class ReportIssueActivity extends AppCompatActivity implements
     // when service is selected
     @Override
     public void onSelect(Open311Service open311Service) {
+        // note the service id
+        mServiceId = open311Service.id;
         // commit fragment
         commitFragment(frags[FRAG_OPEN_ISSUE_TICKET]);
     }
@@ -263,5 +279,72 @@ public class ReportIssueActivity extends AppCompatActivity implements
     @Override
     public void selectAddress(Bundle args) {
         openLocationBottomSheet(args);
+    }
+
+    @Override
+    public void selectedAddress(Bundle locationData) {
+        // now post the issue to the server
+        Location location = locationData.getParcelable(Constants.LOCATION_DATA_EXTRA);
+        mLocationAddress = locationData.getString(Constants.RESULT_DATA_KEY);
+        // Location
+        mLocationMap = new HashMap<>();
+        mLocationMap.put("coordinates", new Double[]{ location.getLongitude(), location.getLatitude() });
+    }
+
+    @Override
+    public void doPost(Map<String, Object> issueMap) {
+        // first thing first, check if user has provided location details
+        if (mLocationMap.isEmpty()) {
+            Toast.makeText(this, R.string.warning_empty_issue_location, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(mServiceId)) {
+            Toast.makeText(this, R.string.warning_empty_service_id, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        issueMap.put("location", mLocationMap);
+
+        // pack location address if it's available
+        if (!TextUtils.isEmpty(mLocationAddress)) {
+            issueMap.put("address", mLocationAddress);
+        }
+
+        // pack service id
+        issueMap.put("service", mServiceId);
+
+        // Prepare the dialog
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setMessage(getString(R.string.text_opening_ticket));
+        dialog.setIndeterminate(true);
+
+
+        // do the posting
+        new Open311Api.ServiceBuilder(this).build(Open311Api.ServiceRequestEndpoint.class)
+                .openTicket("Bearer " + Util.getAuthToken(this),issueMap)
+                .enqueue(getPostIssueCallback(dialog));
+
+        // show the dialog
+        pDialog.show();
+    }
+
+    private Callback<ResponseBody> getPostIssueCallback(final ProgressDialog dialog) {
+        return new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                dialog.dismiss();
+                if (response.isSuccessful()) {
+                    // TODO: Get issue Ticket and display it to the user
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                dialog.dismiss();
+                // show error message
+                Toast.makeText(ReportIssueActivity.this, R.string.msg_network_error, Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 }

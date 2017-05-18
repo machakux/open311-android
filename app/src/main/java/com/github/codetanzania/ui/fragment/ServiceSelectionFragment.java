@@ -89,7 +89,7 @@ public class ServiceSelectionFragment extends Fragment {
         rvServices.addOnItemTouchListener(tListener);
 
         // attach next event listener to button
-        attachNextEvent(fragView.findViewById(R.id.btn_NextAction));
+        attachNextEvent(fragView.findViewById(R.id.btn_OpenIssue));
     }
 
     private void attachNextEvent(View button) {
