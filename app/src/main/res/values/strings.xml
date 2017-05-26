@@ -89,6 +89,10 @@
     <string name="warning_empty_service_id">Cannot post an issue without service. Please, select service and retry again</string>
     <string name="text_opening_ticket">Posting Issue to DAWASCO</string>
     <string name="msg_network_error">Network Error</string>
+    <string name="text_request_location">We need your location as a starting point to resolve the issue</string>
+    <string name="text_confirm_location">Ok, Use My Location</string>
+    <string name="text_deny_location">No, Thanks!</string>
+    <string name="text_item_saved">Account Updated</string>
 
     <string-array name="duration_names">
         <item>Today</item>

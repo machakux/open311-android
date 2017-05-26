@@ -21,7 +21,7 @@ import java.util.List;
 // @Table(name = "open311Service", id = BaseColumns._ID)
 public class Open311Service implements Parcelable {
 
-    public transient static final String ID   = "id";
+    public transient static final String ID   = "_id";
     public transient static final String CODE = "code";
     public transient static final String NAME = "name";
     public transient static final String DESCRIPTION = "description";

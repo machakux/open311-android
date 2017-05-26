@@ -19,14 +19,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.github.codetanzania.Constants;
 import com.github.codetanzania.api.Open311Api;
 import com.github.codetanzania.model.Open311Service;
-import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.ui.fragment.ImageCaptureFragment;
 import com.github.codetanzania.ui.fragment.JurisdictionsBottomSheetDialogFragment;
 import com.github.codetanzania.ui.fragment.OpenIssueTicketFragment;
@@ -34,6 +32,7 @@ import com.github.codetanzania.ui.fragment.ServiceSelectionFragment;
 import com.github.codetanzania.util.Util;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -146,8 +145,11 @@ public class ReportIssueActivity extends AppCompatActivity implements
             String servicesJson = null;
             try {
                 servicesJson = response.body().string();
+
+                Log.d(TAG, servicesJson);
+
                 List<Open311Service> open311Services = Open311Service.fromJson(servicesJson);
-                Log.d(TAG, "Services: " + open311Services);
+                // Log.d(TAG, "Services: " + open311Services);
                 // commit the fragment
                 // insert fragment in order in which they will appear
                 Bundle args = new Bundle();
@@ -326,7 +328,18 @@ public class ReportIssueActivity extends AppCompatActivity implements
                 .enqueue(getPostIssueCallback(dialog));
 
         // show the dialog
-        pDialog.show();
+        dialog.show();
+    }
+
+    private void displayMessage(String code) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Received Ticket ID: " + code);
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
     }
 
     private Callback<ResponseBody> getPostIssueCallback(final ProgressDialog dialog) {
@@ -336,6 +349,14 @@ public class ReportIssueActivity extends AppCompatActivity implements
                 dialog.dismiss();
                 if (response.isSuccessful()) {
                     // TODO: Get issue Ticket and display it to the user
+                    try {
+                        String str = response.body().string();
+                        JSONObject jsonObject = new JSONObject(str);
+                        String code = jsonObject.getString("code");
+                        displayMessage(code);
+                    } catch (IOException | JSONException ioException) {
+
+                    }
                 }
             }
 

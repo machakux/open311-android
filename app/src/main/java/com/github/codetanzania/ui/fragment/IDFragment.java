@@ -21,6 +21,7 @@ import android.widget.EditText;
 import com.github.codetanzania.ui.activity.HomeMenuActivity;
 import com.github.codetanzania.ui.activity.IssueTicketGroupsActivity;
 import com.github.codetanzania.model.Reporter;
+import com.github.codetanzania.ui.activity.SplashScreenActivity;
 import com.github.codetanzania.util.Util;
 
 import tz.co.codetanzania.R;
@@ -41,7 +42,7 @@ public class IDFragment extends Fragment {
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.til_Email).setVisibility(View.GONE);
-        view.findViewById(R.id.ll_UserAccount).setVisibility(View.GONE);
+        // view.findViewById(R.id.ll_UserAccount).setVisibility(View.GONE);
         final EditText etUserName = (EditText) view.findViewById(R.id.et_userName);
         final EditText etPhone = (EditText) view.findViewById(R.id.et_phoneNumber);
         view.findViewById(R.id.btn_Next).setOnClickListener(new View.OnClickListener() {
@@ -67,7 +68,7 @@ public class IDFragment extends Fragment {
                     reporter.phone = String.format("%s%s","255",phoneNumber.toString());
                     reporter.name  = userName.toString();
                     Util.storeCurrentReporter(getActivity(), reporter);
-                    startActivity(new Intent(getActivity(), HomeMenuActivity.class));
+                    startActivity(new Intent(getActivity(), SplashScreenActivity.class));
                 }
             }
         });

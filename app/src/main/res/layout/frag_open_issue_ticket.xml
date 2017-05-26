@@ -20,6 +20,7 @@
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
+                android:layout_marginBottom="128dp"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -30,7 +31,7 @@
                 <fragment
                     android:id="@+id/frag_CapturePreview"
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="250dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp"
                     android:name="com.github.codetanzania.ui.fragment.ImageCaptureFragment"/>
@@ -57,22 +58,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/text_fetch_location"/>
-
-                <!--<TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="16dp"
-                    android:text="@string/text_select_area" />-->
-
-                <!-- Map showing issue location -->
-                <!--<FrameLayout-->
-                <!--android:id="@+id/frl_MapView"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="175dp">-->
-
-                <!--&lt;!&ndash; Map will be rendered here &ndash;&gt;-->
-
-                <!--</FrameLayout>-->
 
             </LinearLayout>
         </ScrollView>

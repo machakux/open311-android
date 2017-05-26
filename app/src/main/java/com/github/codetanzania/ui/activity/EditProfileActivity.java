@@ -1,14 +1,14 @@
 package com.github.codetanzania.ui.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.github.codetanzania.model.Reporter;
 import com.github.codetanzania.util.Util;
@@ -34,6 +34,17 @@ public class EditProfileActivity extends AppCompatActivity {
         bindDataToViews();
         // bind events
         bindEventsToViews();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void bindDataToViews() {
@@ -96,7 +107,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
 
                 Util.storeCurrentReporter(EditProfileActivity.this, mReporter);
-
+                Toast.makeText(EditProfileActivity.this, getString(R.string.text_item_saved), Toast.LENGTH_SHORT).show();
             }
         });
     }
