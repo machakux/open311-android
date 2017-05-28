@@ -127,19 +127,14 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
         String token = Util.getAuthToken(this);
         Reporter reporter = Util.getCurrentReporter(this);
         assert reporter != null;
-        String queryParams = String.format("{\"reporter.phone\":\"%s\"}", Util.getCurrentReporter(this).phone);
+        String queryParams = String.format("{\"reporter.phone\":\"%s\"}", reporter.phone);
         Log.e(TAG, queryParams);
         assert token != null;
 
         // load data from the server
-        try {
-            Open311Api.ServiceBuilder api = new Open311Api.ServiceBuilder(this);
-            api.build(Open311Api.ServiceRequestEndpoint.class)
+        Open311Api.ServiceBuilder api = new Open311Api.ServiceBuilder(this);
+        api.build(Open311Api.ServiceRequestEndpoint.class)
                 .getByUserId(String.format("Bearer %s", token), queryParams).enqueue(this);
-
-        } catch (Exception e) {
-            Log.e(TAG, "An error was " + e.getMessage());
-        }
     }
 
     private Bundle packForError(String msg, int icn) {
@@ -222,8 +217,7 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
                     Log.d(TAG, "DATA: " + body);
                     isErrorState = false;
                     displayServiceRequests(
-                            ServiceRequestsUtil.fromJson(body)
-                    );
+                            ServiceRequestsUtil.fromJson(body));
                 } catch (IOException e) {
                     Log.e(TAG, String.format("An error was %s", e.getMessage()));
                 }

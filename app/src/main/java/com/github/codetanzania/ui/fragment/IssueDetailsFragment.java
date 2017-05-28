@@ -57,7 +57,7 @@ public class IssueDetailsFragment extends Fragment {
         TextView tvReportTimestamp = (TextView) fragView.findViewById(R.id.tv_ReportTimestamp);
         String timestamp = "Unknown time";
         if (serviceRequest.createdAt != null) {
-            timestamp = "  " + Util.formatDate(serviceRequest.createdAt, "yy-MM-dd HH:mm:ss");
+            timestamp = "  " + Util.formatDate(serviceRequest.createdAt, "yyyy-MM-dd HH:mm:ss");
         }
         tvReportTimestamp.setText(timestamp);
         TextView tvTicketTitle = (TextView) fragView.findViewById(R.id.tv_TicketTitle);
@@ -71,32 +71,29 @@ public class IssueDetailsFragment extends Fragment {
                 fragView.findViewById(R.id.rv_Attachments);
         // todo: get attachments from arguments bundle
         List<String> attachments = serviceRequest.attachments;
-        if (attachments == null || attachments.isEmpty()) {
-            attachments = new ArrayList<>();
-            attachments.add("92934000xskle.mp3");
-            attachments.add("2dkaclla.mp4");
-        }
         TextView tvAttachments = (TextView) fragView.findViewById(R.id.tv_Attachments);
-        // tvAttachments.setVisibility(attachments.isEmpty() ? View.GONE : View.VISIBLE);
-        tvAttachments.setText(
-                String.format(Locale.getDefault(), "%s (%d)", getString(R.string.text_issue_attachment), attachments.size()));
-        mAttachmentsRecyclerView.setVisibility(attachments.isEmpty() ? View.GONE : View.VISIBLE);
-        // create adapter
-        AttachmentCardViewAdapter attachmentCardViewAdapter =
-                new AttachmentCardViewAdapter(getActivity(),
-                        attachments, new OnItemClickListener<String>() {
-                    @Override
-                    public void onItemClick(String theItem) {
+        tvAttachments.setVisibility(attachments == null || attachments.isEmpty() ? View.GONE : View.VISIBLE);
+        if (!(attachments == null || attachments.isEmpty())) {
+            tvAttachments.setText(
+                    String.format(Locale.getDefault(), "%s (%d)", getString(R.string.text_issue_attachment), attachments.size()));
+            // create adapter
+            AttachmentCardViewAdapter attachmentCardViewAdapter =
+                    new AttachmentCardViewAdapter(getActivity(),
+                            attachments, new OnItemClickListener<String>() {
+                        @Override
+                        public void onItemClick(String theItem) {
 
-                    }
-                });
-        // setup recycler view
-        mAttachmentsRecyclerView.setAdapter(
-            attachmentCardViewAdapter);
-        // lineary layout manager
-        LinearLayoutManager layoutManager =
-                new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        // setup recycler view
-        mAttachmentsRecyclerView.setLayoutManager(layoutManager);
+                        }
+                    });
+            // setup recycler view
+            mAttachmentsRecyclerView.setAdapter(
+                    attachmentCardViewAdapter);
+            // lineary layout manager
+            LinearLayoutManager layoutManager =
+                    new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            // setup recycler view
+            mAttachmentsRecyclerView.setLayoutManager(layoutManager);
+        }
+        mAttachmentsRecyclerView.setVisibility(attachments == null || attachments.isEmpty() ? View.GONE : View.VISIBLE);
     }
 }

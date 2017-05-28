@@ -56,9 +56,6 @@
         <activity android:name="com.github.codetanzania.ui.activity.IssueTicketGroupsActivity"
             android:label="@string/app_name" />
 
-        <activity android:name="com.github.codetanzania.ui.activity.ServiceGroupItemsActivity"
-            android:label="@string/app_name" />
-
         <activity android:name="com.github.codetanzania.ui.activity.CivilianProfileActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:label="@string/app_name"/>

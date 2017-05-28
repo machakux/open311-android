@@ -35,11 +35,7 @@ public class ServiceRequestsFragment extends Fragment {
     // to the RecyclerView's adapter
     private OnItemClickListener<ServiceRequest> mClickListener;
 
-    private RecyclerView rvTodayServiceRequests;
-    private RecyclerView rvYesterdayServiceRequests;
-    private RecyclerView rvThisWeekServiceRequests;
-    private RecyclerView rvThisMonthServiceRequests;
-    private RecyclerView rvOldestServiceRequests;
+    private RecyclerView rvServiceRequests;
 
     // singleton method
     public static ServiceRequestsFragment getNewInstance(Bundle args) {
@@ -55,20 +51,8 @@ public class ServiceRequestsFragment extends Fragment {
 
     @Override public void onViewCreated(
         View view, Bundle savedInstanceState) {
-        rvTodayServiceRequests = (RecyclerView)
-                view.findViewById(R.id.rv_TodayServiceRequests);
-
-        rvYesterdayServiceRequests = (RecyclerView)
-                view.findViewById(R.id.rv_YesterdayServiceRequests);
-
-        rvThisWeekServiceRequests = (RecyclerView)
-                view.findViewById(R.id.rv_ThisWeekServiceRequests);
-
-        rvThisMonthServiceRequests = (RecyclerView)
-                view.findViewById(R.id.rv_ThisMonthServiceRequests);
-
-        rvOldestServiceRequests = (RecyclerView)
-                view.findViewById(R.id.rv_OldMonth);
+        rvServiceRequests = (RecyclerView)
+                view.findViewById(R.id.rv_ServiceRequests);
 
         SparseArray<ServiceRequest> serviceRequests = getArguments()
                 .getSparseParcelableArray(SERVICE_REQUESTS);
@@ -95,39 +79,20 @@ public class ServiceRequestsFragment extends Fragment {
 
         List<ServiceRequest> requests = new ArrayList<>(serviceRequests.size());
 
+
+
         for (int i = 0; i < serviceRequests.size(); i++) {
             requests.add(serviceRequests.get(i));
         }
 
+        ServiceRequestsAdapter adapter = new ServiceRequestsAdapter(
+                getActivity(), getString(R.string.text_issue_tickets), requests, mClickListener);
+
         Map<Integer, List<ServiceRequest>> grouped = ServiceRequestsUtil.group(requests);
-
-        for (Integer key : grouped.keySet()) {
-            if (!grouped.get(key).isEmpty()) {
-                ServiceRequestsAdapter adapter = new ServiceRequestsAdapter(
-                        getActivity(), ServiceRequestsUtil.getI18NTitle(getActivity(), key), grouped.get(key),
-                        mClickListener
-                );
-
-                RecyclerView recyclerView;
-
-                if (key == ServiceRequestsUtil.TODAY_GROUP) {
-                    recyclerView = rvTodayServiceRequests;
-                } else if (key == ServiceRequestsUtil.YESTERDAY_GROUP) {
-                    recyclerView = rvYesterdayServiceRequests;
-                } else if (key == ServiceRequestsUtil.THIS_WEEK_GROUP) {
-                    recyclerView = rvThisWeekServiceRequests;
-                } else if (key == ServiceRequestsUtil.THIS_MONTH_GROUP) {
-                    recyclerView = rvThisMonthServiceRequests;
-                } else {
-                    recyclerView = rvOldestServiceRequests;
-                }
-
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),
-                        DividerItemDecoration.VERTICAL));
-                recyclerView.setHasFixedSize(true);
-            }
-        }
+        rvServiceRequests.setAdapter(adapter);
+        rvServiceRequests.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        rvServiceRequests.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.VERTICAL));
+        rvServiceRequests.setHasFixedSize(true);
     }
 }

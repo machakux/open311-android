@@ -40,7 +40,7 @@
     <string name="action_view_details">View Details</string>
     <string name="action_issue_progress">Issue Progress</string>
     <string name="action_show_on_map">Show On Map</string>
-    <string name="text_issue_attachment">Attachments</string>
+    <string name="text_issue_attachment">Image</string>
     <string name="text_audio_attachment">Audio</string>
     <string name="text_video_attachment">Video</string>
     <string name="text_log_content"><![CDATA[%s]]></string>
@@ -93,6 +93,7 @@
     <string name="text_confirm_location">Ok, Use My Location</string>
     <string name="text_deny_location">No, Thanks!</string>
     <string name="text_item_saved">Account Updated</string>
+    <string name="text_issue_tickets">Issues</string>
 
     <string-array name="duration_names">
         <item>Today</item>
