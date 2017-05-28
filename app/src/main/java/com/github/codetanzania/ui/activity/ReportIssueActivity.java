@@ -1,8 +1,10 @@
 package com.github.codetanzania.ui.activity;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -10,9 +12,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -59,6 +63,8 @@ public class ReportIssueActivity extends AppCompatActivity implements
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
+    private static final int REQUEST_ACCESS_FINE_LOCATION = 2;
+
     /* index of the current selected issue. */
     private static final int FRAG_SELECT_ISSUE_CATEGORY = 0;
     private static final int FRAG_OPEN_ISSUE_TICKET     = 1;
@@ -89,6 +95,22 @@ public class ReportIssueActivity extends AppCompatActivity implements
 
         // load stuffs
         loadServices();
+
+        // request permission to read location
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            // case when user never selected "Never allow" but he/she still declined the request
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                displayDialogForPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+                        getString(R.string.text_allow_location_access),
+                        getString(R.string.action_confirm_access_location),
+                        getString(R.string.action_decline_access_location));
+            }
+            // let's assume we can ask for permission anyway
+            else {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ACCESS_FINE_LOCATION);
+            }
+        }
     }
 
     @Override
@@ -122,6 +144,20 @@ public class ReportIssueActivity extends AppCompatActivity implements
         Log.d(TAG, "----LOADING DATA FROM SRV----");
         // show progress-dialog while we're loading data from the server.
         pDialog = ProgressDialog.show(this, getString(R.string.title_loading_services), getString(R.string.text_loading_services), true);
+    }
+
+    private void displayDialogForPermission(String manifestPermissionId, String message, String pButtonText, String nButtonText) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+        .setPositiveButton(pButtonText, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // ask for permission
+                ActivityCompat.requestPermissions(ReportIssueActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ACCESS_FINE_LOCATION);
+            }
+        })
+        .setNegativeButton(nButtonText, null);
+        builder.create().show();
     }
 
     // commit the fragment
@@ -166,6 +202,18 @@ public class ReportIssueActivity extends AppCompatActivity implements
         } else {
             Toast.makeText(this, "Invalid Request/Response", Toast.LENGTH_SHORT).show();
             finish();
+        }
+    }
+
+    // when activity result is received back
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, String permissions[], int grantResults[]) {
+        switch (requestCode) {
+            case REQUEST_ACCESS_FINE_LOCATION:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // we can ask for permission
+                }
         }
     }
 

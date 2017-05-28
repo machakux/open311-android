@@ -94,6 +94,9 @@
     <string name="text_deny_location">No, Thanks!</string>
     <string name="text_item_saved">Account Updated</string>
     <string name="text_issue_tickets">Issues</string>
+    <string name="action_confirm_access_location">Allow</string>
+    <string name="action_decline_access_location">Don\'t Allow</string>
+    <string name="text_allow_location_access">We need to know your location so that we can pinpoint the issue</string>
 
     <string-array name="duration_names">
         <item>Today</item>
