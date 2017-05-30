@@ -28,12 +28,6 @@ public class ServiceRequestsUtil {
 
     public static final String TAG = "ServiceRequestsUtil";
 
-    public static final int TODAY_GROUP      = 0;
-    public static final int YESTERDAY_GROUP  = 1;
-    public static final int THIS_WEEK_GROUP  = 2;
-    public static final int THIS_MONTH_GROUP = 3;
-    public static final int OLDEST_GROUP     = 4;
-
     public static final void save(Context ctx, ServiceRequest[] requests) {
         // save the requests to the shared preferences
         SharedPreferences mPrefs = ctx.getSharedPreferences(
@@ -90,64 +84,5 @@ public class ServiceRequestsUtil {
 
             return extraDays - dayTwo.get(Calendar.DAY_OF_YEAR) + dayOneOriginalYearDays ;
         }
-    }
-
-    public static Map<Integer, List<ServiceRequest>> group(List<ServiceRequest> serviceRequestList) {
-
-        Map<Integer, List<ServiceRequest>> retVal =
-                new HashMap<>();
-
-        retVal.put(TODAY_GROUP,         new ArrayList<ServiceRequest>());
-        retVal.put(YESTERDAY_GROUP,     new ArrayList<ServiceRequest>());
-        retVal.put(THIS_WEEK_GROUP,     new ArrayList<ServiceRequest>());
-        retVal.put(THIS_MONTH_GROUP,    new ArrayList<ServiceRequest>());
-        retVal.put(OLDEST_GROUP,        new ArrayList<ServiceRequest>());
-
-        Date _now     = new Date(); // as we speak
-        int  _interval;
-
-        for (ServiceRequest req: serviceRequestList) {
-            // if issue has not been resolved yet, use status
-            if (req.resolvedAt == null) {
-                if (req.status == null) {
-                    continue;
-                } else {
-                    if (req.status.updatedAt == null) {
-                        _interval = daysBetween(_now, req.status.createdAt);
-                    } else {
-                        _interval = daysBetween(_now, req.status.updatedAt);
-                    }
-                }
-            } else {
-                _interval = daysBetween(_now, req.resolvedAt);
-            }
-
-            if (_interval <= 1) {
-                retVal.get(TODAY_GROUP).add(req);
-            } else if (_interval > 1 && _interval <= 2) {
-                retVal.get(YESTERDAY_GROUP).add(req);
-            } else if (_interval > 2 && _interval <= 7) {
-                retVal.get(THIS_WEEK_GROUP).add(req);
-            } else {
-                Calendar cal1 = Calendar.getInstance();
-                cal1.setTime(_now);
-                Calendar cal2 = Calendar.getInstance();
-                cal2.setTime(req.resolvedAt != null ? req.resolvedAt :
-                        (req.status.updatedAt != null ? req.status.updatedAt : req.status.createdAt));
-                if (cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH)) {
-                    retVal.get(THIS_MONTH_GROUP).add(req);
-                } else {
-                    retVal.get(OLDEST_GROUP).add(req);
-                }
-            }
-
-            Log.d(TAG, String.valueOf(_interval));
-        }
-
-        return retVal;
-    }
-
-    public static String getI18NTitle(Context mContext, int index) {
-        return mContext.getResources().getStringArray(R.array.duration_names)[index];
     }
 }
