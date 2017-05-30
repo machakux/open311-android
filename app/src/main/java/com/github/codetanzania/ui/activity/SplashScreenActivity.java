@@ -2,6 +2,7 @@ package com.github.codetanzania.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,6 +22,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import tz.co.codetanzania.R;
 
 public class SplashScreenActivity extends AppCompatActivity implements Callback<ResponseBody> {
 
@@ -28,11 +30,29 @@ public class SplashScreenActivity extends AppCompatActivity implements Callback<
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override public void onResume() {
         super.onResume();
-        getJWTToken();
+
+        // check if user is running this application for the first time
+        try {
+          if (Util.isFirstRun(this, Util.RunningMode.FIRST_TIME_INSTALL)) {
+                startActivity(new Intent(this, AppIntroActivity.class));
+                // finish this one. We will comeback afresh
+              finish();
+          } else {
+              getJWTToken();
+          }
+        } catch (Exception e) {
+            // fail safe. We firstly display the dialog to the user tell them that we are going to quit
+            // and then do so.
+            // AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+            // alertBuilder.setMessage(R.string.text_err_pre_condition_failed)
+            //     .setPositiveButton(R.string.text_quit, null);
+            // alertBuilder.create().show();
+        }
     }
 
     private void getJWTToken() {

@@ -20,6 +20,7 @@ import retrofit2.http.Header;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Query;
 import retrofit2.http.QueryName;
 import tz.co.codetanzania.R;
 
@@ -45,7 +46,7 @@ public class Open311Api {
 
         @GET("/servicerequests")
         @Headers({"Accept: application/json"})
-        Call<ResponseBody> getByUserId(@Header("Authorization") String authorization, @QueryName()String query);
+        Call<ResponseBody> getByUserId(@Header("Authorization") String authorization, @Query("query")String query);
     }
 
     public interface AuthEndpoint {

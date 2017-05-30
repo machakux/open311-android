@@ -64,7 +64,7 @@ public class Open311ServiceAdapter extends RecyclerView.Adapter<Open311ServiceAd
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         mViewHolder = new ViewHolder(
-                inflater.inflate(R.layout.card_view_service, parent, false));
+                inflater.inflate(R.layout.service_details_content, parent, false));
         return mViewHolder;
     }
 

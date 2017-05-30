@@ -87,6 +87,11 @@
             <!--</intent-filter>-->
         </activity>
 
+        <!-- start the activity -->
+        <activity android:name="com.github.codetanzania.ui.activity.AppIntroActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
         <activity android:name="com.github.codetanzania.ui.activity.HomeMenuActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:label="@string/app_name"/>

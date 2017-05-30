@@ -23,9 +23,6 @@ import tz.co.codetanzania.R;
 
 public class IssueDetailsFragment extends Fragment {
 
-    // makes sense to make this singleton since we don't have many data
-    // private static IssueDetailsFragment self;
-
     // reference to the open311Service request
     private ServiceRequest mServiceRequest;
 
@@ -57,7 +54,7 @@ public class IssueDetailsFragment extends Fragment {
         TextView tvReportTimestamp = (TextView) fragView.findViewById(R.id.tv_ReportTimestamp);
         String timestamp = "Unknown time";
         if (serviceRequest.createdAt != null) {
-            timestamp = "  " + Util.formatDate(serviceRequest.createdAt, "yyyy-MM-dd HH:mm:ss");
+            timestamp = "  " + Util.formatDate(serviceRequest.createdAt, "MM-dd HH:mm:ss");
         }
         tvReportTimestamp.setText(timestamp);
         TextView tvTicketTitle = (TextView) fragView.findViewById(R.id.tv_TicketTitle);

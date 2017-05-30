@@ -46,14 +46,7 @@ public class JurisdictionsBottomSheetDialogFragment extends BottomSheetDialogFra
         public void onStateChanged(@NonNull View bottomSheet, int newState) {
             // we need this or the app will crash when user decides to change location
             if (newState == BottomSheetBehavior.STATE_HIDDEN || newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                if (mMapFrag != null) {
-                    getFragmentManager().beginTransaction()
-                            .remove(mMapFrag)
-                            .disallowAddToBackStack()
-                            .commitAllowingStateLoss();
-                }
-
-                dismiss();
+                closeMap();
             }
         }
 
@@ -62,6 +55,17 @@ public class JurisdictionsBottomSheetDialogFragment extends BottomSheetDialogFra
 
         }
     };
+
+    private void closeMap() {
+        if (mMapFrag != null) {
+            getFragmentManager().beginTransaction()
+                    .remove(mMapFrag)
+                    .disallowAddToBackStack()
+                    .commitAllowingStateLoss();
+        }
+
+        dismiss();
+    }
 
     public void selectLocation(View view) {
 
@@ -103,11 +107,12 @@ public class JurisdictionsBottomSheetDialogFragment extends BottomSheetDialogFra
         contentView.findViewById(R.id.btn_AcceptLocation).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: update selected location
-                Bundle locationBundle = new Bundle();
-                locationBundle.putParcelable(Constants.LOCATION_DATA_EXTRA, mLocation);
-                locationBundle.putString(Constants.RESULT_DATA_KEY, mAddress);
-                mOnAcceptAddress.selectedAddress(locationBundle);
+            // TODO: update selected location
+            Bundle locationBundle = new Bundle();
+            locationBundle.putParcelable(Constants.LOCATION_DATA_EXTRA, mLocation);
+            locationBundle.putString(Constants.RESULT_DATA_KEY, mAddress);
+            mOnAcceptAddress.selectedAddress(locationBundle);
+            closeMap();
             }
         });
 

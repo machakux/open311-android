@@ -79,8 +79,6 @@ public class ServiceRequestsFragment extends Fragment {
 
         List<ServiceRequest> requests = new ArrayList<>(serviceRequests.size());
 
-
-
         for (int i = 0; i < serviceRequests.size(); i++) {
             requests.add(serviceRequests.get(i));
         }
@@ -88,7 +86,6 @@ public class ServiceRequestsFragment extends Fragment {
         ServiceRequestsAdapter adapter = new ServiceRequestsAdapter(
                 getActivity(), getString(R.string.text_issue_tickets), requests, mClickListener);
 
-        Map<Integer, List<ServiceRequest>> grouped = ServiceRequestsUtil.group(requests);
         rvServiceRequests.setAdapter(adapter);
         rvServiceRequests.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         rvServiceRequests.addItemDecoration(new DividerItemDecoration(getActivity(),

@@ -29,7 +29,7 @@
             android:layout_toEndOf="@id/profile_image"
             android:paddingTop="5dp"
             android:layout_marginStart="10dp"
-            android:textSize="22sp"/>
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tv_Reporter"
@@ -38,6 +38,7 @@
             android:layout_below="@id/tv_TicketID"
             android:layout_toEndOf="@id/profile_image"
             android:layout_marginStart="10dp"
+            android:textSize="10sp"
             android:paddingBottom="5dp" />
 
         <TextView
@@ -46,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_TicketID"
             android:layout_toEndOf="@id/tv_Reporter"
+            android:textSize="10sp"
             android:paddingBottom="5dp"/>
 
     </RelativeLayout>
@@ -62,7 +64,7 @@
             android:id="@+id/tv_TicketTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp"/>
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tv_Location"

@@ -40,6 +40,7 @@ public class ServiceRequestsAdapter extends
         super(onItemClickListener);
         this.mTitle = title;
         this.mServiceRequests = serviceRequests;
+        this.mServiceRequests.add(0, null);
         this.mContext = mContext;
     }
 
@@ -61,11 +62,12 @@ public class ServiceRequestsAdapter extends
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         /* bind data to the views */
-        if (holder instanceof ServiceHeaderViewHolder) {
+        if (position == TYPE_HEADER) {
             ((ServiceHeaderViewHolder)holder).tvHeader.setText(mTitle);
-        } else if (holder instanceof ServiceRequestViewHolder) {
+        } else {
             ServiceRequest serviceRequest = this
                     .mServiceRequests.get(position);
+
             ((ServiceRequestViewHolder)holder).tvServiceReqTitle.setText(serviceRequest.service.name);
             ((ServiceRequestViewHolder)holder).tvServiceReqTicket.setText(String.format("%s, %s", serviceRequest.service.code, serviceRequest.address));
 
@@ -94,7 +96,7 @@ public class ServiceRequestsAdapter extends
 
     @Override
     public int getItemViewType(int pos) {
-        return pos == TYPE_HEADER ? TYPE_HEADER : TYPE_ITEM;
+        return mServiceRequests.get(pos) == null ? TYPE_HEADER : TYPE_ITEM;
     }
 
     @Override

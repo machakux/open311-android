@@ -23,8 +23,13 @@ import com.github.codetanzania.model.ServiceRequest;
 import com.github.codetanzania.Constants;
 import com.github.codetanzania.util.ServiceRequestsUtil;
 import com.github.codetanzania.util.Util;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -40,7 +45,7 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
     private static final String TAG = "TicketGroupsActivity";
 
     /* Floating Action bar button */
-    private FloatingActionButton mFab;
+    // private FloatingActionButton mFab;
 
     /* Frame layout */
     private FrameLayout mFrameLayout;
@@ -86,8 +91,8 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
 
     @Override public void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        mFab = (FloatingActionButton) findViewById(R.id.fab_ReportIssue);
-        mFab.setAlpha(0.0f);
+        // mFab = (FloatingActionButton) findViewById(R.id.fab_ReportIssue);
+        // mFab.setAlpha(0.0f);
     }
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -127,7 +132,10 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
         String token = Util.getAuthToken(this);
         Reporter reporter = Util.getCurrentReporter(this);
         assert reporter != null;
-        String queryParams = String.format("{\"reporter.phone\":\"%s\"}", reporter.phone);
+        Map queryMap = new HashMap();
+        queryMap.put("reporter.phone", reporter.phone);
+        GsonBuilder gsonBuilder = new GsonBuilder().setLenient();
+        String queryParams = gsonBuilder.create().toJson(queryMap);
         Log.e(TAG, queryParams);
         assert token != null;
 
@@ -175,7 +183,7 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
         }
 
         // show the fab
-        mFab.animate().alpha(1.0f);
+        // mFab.animate().alpha(1.0f);
     }
 
     private void displayError() {
@@ -202,7 +210,7 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
             .commitAllowingStateLoss();
 
         // disable the fab
-        mFab.animate().alpha(0.0f);
+        // .animate().alpha(0.0f);
     }
 
     @Override

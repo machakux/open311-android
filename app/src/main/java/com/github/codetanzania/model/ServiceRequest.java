@@ -29,9 +29,11 @@ public class ServiceRequest implements Parcelable {
     public static final String CREATED_AT = "createdAt";
     public static final String UPDATED_AT = "updatedAt";
     public static final String RESOLVED_AT = "resolvedAt";
+    public static final String CODE = "code";
 
     public ServiceRequest(Parcel in) {
         id = in.readString();
+        code = in.readString();
         description = in.readString();
         jurisdiction = in.readParcelable(Jurisdiction.class.getClassLoader());
         service = in.readParcelable(Open311Service.class.getClassLoader());
@@ -69,6 +71,7 @@ public class ServiceRequest implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(id);
+        parcel.writeString(code);
         parcel.writeString(description);
         parcel.writeParcelable(jurisdiction, i);
         parcel.writeParcelable(service, i);
@@ -177,6 +180,8 @@ public class ServiceRequest implements Parcelable {
 
     public String description;
 
+    public String code;
+
     // take comma separated strings and convert into an array of strings
     // public void setAttachments(String...attachments) {
     //    this.attachments = Arrays.asList(attachments);
@@ -200,6 +205,7 @@ public class ServiceRequest implements Parcelable {
                 ", attachments=" + attachments +
                 ", comments=" + comments +
                 ", resolvedAt=" + resolvedAt +
+                ", code=" + code +
                 '}';
     }
 }

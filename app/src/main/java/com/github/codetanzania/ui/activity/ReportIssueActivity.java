@@ -83,6 +83,9 @@ public class ReportIssueActivity extends AppCompatActivity implements
     // Service
     private String mServiceId;
 
+    // check if permission to access fine location was granted
+    boolean mFineLocationPermissionCheck;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,9 +99,11 @@ public class ReportIssueActivity extends AppCompatActivity implements
         // load stuffs
         loadServices();
 
+        mFineLocationPermissionCheck = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED;
+
         // request permission to read location
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
+        if (!mFineLocationPermissionCheck) {
             // case when user never selected "Never allow" but he/she still declined the request
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                 displayDialogForPermission(Manifest.permission.ACCESS_FINE_LOCATION,
@@ -192,8 +197,20 @@ public class ReportIssueActivity extends AppCompatActivity implements
                 args.putParcelableArrayList(Constants.Const.SERVICE_LIST, (ArrayList<? extends Parcelable>) open311Services);
                 frags[FRAG_SELECT_ISSUE_CATEGORY] = ServiceSelectionFragment.getNewInstance(args);
                 frags[FRAG_OPEN_ISSUE_TICKET] = OpenIssueTicketFragment.getNewInstance(null);
-                // commit the first fragment
-                commitFragment(frags[FRAG_SELECT_ISSUE_CATEGORY]);
+
+                // check if permission was granted
+                if (mFineLocationPermissionCheck) {
+                    // commit the first fragment
+                    commitFragment(frags[FRAG_SELECT_ISSUE_CATEGORY]);
+                }
+                // ask for permission again
+                else {
+                    displayDialogForPermission(Manifest.permission.ACCESS_FINE_LOCATION,
+                            getString(R.string.text_allow_location_access),
+                            getString(R.string.action_confirm_access_location),
+                            getString(R.string.action_decline_access_location));
+                }
+
             } catch (IOException | JSONException exception) {
                 Toast.makeText(this, "Error Processing Data", Toast.LENGTH_SHORT).show();
                 finish();
@@ -212,7 +229,8 @@ public class ReportIssueActivity extends AppCompatActivity implements
         switch (requestCode) {
             case REQUEST_ACCESS_FINE_LOCATION:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // we can ask for permission
+                    // we can now access location
+                    mFineLocationPermissionCheck = true;
                 }
         }
     }

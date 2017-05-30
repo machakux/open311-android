@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.github.codetanzania.ui.fragment.GoogleMapFragment;
@@ -26,6 +27,8 @@ import tz.co.codetanzania.R;
 
 public class IssueProgressActivity extends AppCompatActivity /*implements OnMapReadyCallback*/ {
 
+    public static final String TAG = "IssueProgressActivity";
+
     // private GoogleMap mGoogleMap;
     private DetailsPagerAdapter mDetailsPagerAdapter;
     private ViewPager mViewPager;
@@ -38,13 +41,17 @@ public class IssueProgressActivity extends AppCompatActivity /*implements OnMapR
         setContentView(R.layout.activity_issue_progress);
         mServiceRequest = getIntent().getExtras().getParcelable(Constants.Const.TICKET);
 
+        Log.d(TAG, "Received = " + mServiceRequest);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        // TODO: add ticket id as the title of this actionbar
+        Log.d(TAG, "The code is: " + mServiceRequest.code);
+
+        actionBar.setTitle(mServiceRequest.code);
 
         mDetailsPagerAdapter = new DetailsPagerAdapter(getSupportFragmentManager(), 3);
         mViewPager = (ViewPager) findViewById(R.id.view_pager);
