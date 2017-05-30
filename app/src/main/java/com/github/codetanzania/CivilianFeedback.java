@@ -59,8 +59,6 @@ public class CivilianFeedback extends Application {
             .setIconResourceId(R.drawable.ic_settings_black_48dp)
             .create();
 
-        Log.d(TAG, "ITEM IS " + createIssueMenuItem);
-
         // now add our items . Order matters
         homeMenu.addMenuItem(createIssueMenuItem);
         homeMenu.addMenuItem(listIssuesMenuItem);

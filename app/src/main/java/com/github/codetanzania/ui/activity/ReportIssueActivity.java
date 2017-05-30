@@ -14,12 +14,9 @@ import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -33,6 +30,7 @@ import com.github.codetanzania.ui.fragment.ImageCaptureFragment;
 import com.github.codetanzania.ui.fragment.JurisdictionsBottomSheetDialogFragment;
 import com.github.codetanzania.ui.fragment.OpenIssueTicketFragment;
 import com.github.codetanzania.ui.fragment.ServiceSelectionFragment;
+import com.github.codetanzania.util.Open311ServicesUtil;
 import com.github.codetanzania.util.Util;
 
 import org.json.JSONException;
@@ -51,11 +49,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import tz.co.codetanzania.R;
 
-public class ReportIssueActivity extends AppCompatActivity implements
+public class ReportIssueActivity extends BaseAppFragmentActivity implements
         ServiceSelectionFragment.OnSelectService,
         OpenIssueTicketFragment.OnSelectAddress,
         OpenIssueTicketFragment.OnPostIssue,
-        Callback<ResponseBody>,
         JurisdictionsBottomSheetDialogFragment.OnAcceptAddress,
         ImageCaptureFragment.OnStartCapturePhoto {
 
@@ -64,13 +61,6 @@ public class ReportIssueActivity extends AppCompatActivity implements
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private static final int REQUEST_ACCESS_FINE_LOCATION = 2;
-
-    /* index of the current selected issue. */
-    private static final int FRAG_SELECT_ISSUE_CATEGORY = 0;
-    private static final int FRAG_OPEN_ISSUE_TICKET     = 1;
-    private static final int FRAG_ISSUE_TICKET          = 2;
-
-    private Fragment frags[] = new Fragment[5];
 
     // the progress dialog to show while we're loading data
     private ProgressDialog pDialog;
@@ -91,10 +81,7 @@ public class ReportIssueActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_issue);
 
-        //  Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //  setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_clear_black_24dp);
+        // getActionBar().setDisplayHomeAsUpEnabled(true);
 
         // load stuffs
         loadServices();
@@ -111,6 +98,7 @@ public class ReportIssueActivity extends AppCompatActivity implements
                         getString(R.string.action_confirm_access_location),
                         getString(R.string.action_decline_access_location));
             }
+
             // let's assume we can ask for permission anyway
             else {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_ACCESS_FINE_LOCATION);
@@ -141,14 +129,32 @@ public class ReportIssueActivity extends AppCompatActivity implements
     }
 
     private void loadServices() {
-        String authHeader = getSharedPreferences(Constants.Const.KEY_SHARED_PREFS, MODE_PRIVATE)
-                .getString(Constants.Const.AUTH_TOKEN, null);
-        Call<ResponseBody> call = new Open311Api.ServiceBuilder(this).build(Open311Api.ServicesEndpoint.class)
-                .getAll(authHeader);
-        call.enqueue(this);
-        Log.d(TAG, "----LOADING DATA FROM SRV----");
-        // show progress-dialog while we're loading data from the server.
-        pDialog = ProgressDialog.show(this, getString(R.string.title_loading_services), getString(R.string.text_loading_services), true);
+
+        // Use cached data whenever necessary
+        List<Open311Service> cachedData = Open311ServicesUtil.cached(this);
+
+        // if no data was previously cached, then fetch
+        if (cachedData.isEmpty()) {
+            // show progress-dialog while we're loading data from the server.
+            ProgressDialog dialog = ProgressDialog.show(this, getString(R.string.title_loading_services), getString(R.string.text_loading_services), true);
+            String authHeader = getSharedPreferences(Constants.Const.KEY_SHARED_PREFS, MODE_PRIVATE)
+                    .getString(Constants.Const.AUTH_TOKEN, null);
+            Call<ResponseBody> call = new Open311Api.ServiceBuilder(this).build(Open311Api.ServicesEndpoint.class)
+                    .getAll(authHeader);
+            call.enqueue(getOpen311ResponseCallback(dialog));
+        }
+
+        // otherwise, commit the fragment -- to let user select issue category
+        else {
+            displayServiceCategories(cachedData);
+        }
+    }
+
+    private void displayServiceCategories(List<Open311Service> list) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(Constants.Const.SERVICE_LIST, (ArrayList<? extends Parcelable>) list);
+        Fragment fragment = ServiceSelectionFragment.getNewInstance(bundle);
+        setCurrentFragment(R.id.frl_FragmentOutlet, fragment);
     }
 
     private void displayDialogForPermission(String manifestPermissionId, String message, String pButtonText, String nButtonText) {
@@ -165,61 +171,62 @@ public class ReportIssueActivity extends AppCompatActivity implements
         builder.create().show();
     }
 
-    // commit the fragment
-    private void commitFragment(Fragment frag) {
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                .replace(R.id.frl_FragmentOutlet, frag)
-                .commit();
-    }
+    public Callback<ResponseBody> getOpen311ResponseCallback(final ProgressDialog dialog) {
+        return new Callback<ResponseBody>() {
 
-    @Override
-    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-        // hide the dialog, releasing all the resources
-        pDialog.dismiss();
-
-        Log.d(TAG, "Response status: " + response.code());
-        Log.d(TAG, "Response message: " + response.message());
-
-        if (response.isSuccessful()) {
-            String servicesJson = null;
-            try {
-                servicesJson = response.body().string();
-
-                Log.d(TAG, servicesJson);
-
-                List<Open311Service> open311Services = Open311Service.fromJson(servicesJson);
-                // Log.d(TAG, "Services: " + open311Services);
-                // commit the fragment
-                // insert fragment in order in which they will appear
-                Bundle args = new Bundle();
-                args.putParcelableArrayList(Constants.Const.SERVICE_LIST, (ArrayList<? extends Parcelable>) open311Services);
-                frags[FRAG_SELECT_ISSUE_CATEGORY] = ServiceSelectionFragment.getNewInstance(args);
-                frags[FRAG_OPEN_ISSUE_TICKET] = OpenIssueTicketFragment.getNewInstance(null);
-
-                // check if permission was granted
-                if (mFineLocationPermissionCheck) {
-                    // commit the first fragment
-                    commitFragment(frags[FRAG_SELECT_ISSUE_CATEGORY]);
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                // in any case, hide the dialog if it's still shown
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
                 }
-                // ask for permission again
-                else {
-                    displayDialogForPermission(Manifest.permission.ACCESS_FINE_LOCATION,
-                            getString(R.string.text_allow_location_access),
-                            getString(R.string.action_confirm_access_location),
-                            getString(R.string.action_decline_access_location));
-                }
+                if (response.isSuccessful()) {
 
-            } catch (IOException | JSONException exception) {
-                Toast.makeText(this, "Error Processing Data", Toast.LENGTH_SHORT).show();
-                finish();
+                    List<Open311Service> list = new ArrayList<>();
+
+                    try {
+                        String servicesJson = response.body().string();
+                        list.addAll(Open311Service.fromJson(servicesJson));
+                    } catch(IOException | JSONException exception) {
+                        Log.e(TAG, exception.getMessage());
+                        Toast.makeText(ReportIssueActivity.this, "Error parsing data", Toast.LENGTH_SHORT)
+                            .show();
+                    }
+
+                    // if we successfully retrieved data, we cache it to improve future loadings
+                    if (!list.isEmpty()) {
+                        Open311ServicesUtil.cache(ReportIssueActivity.this, list);
+                        displayServiceCategories(list);
+                    }
+                } else {
+                    showNetworkError(getString(R.string.text_http_error),
+                            getString(R.string.text_cancel),
+                            getString(R.string.text_report),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // TODO: start report error routine
+                                }
+                            });
+                }
             }
 
-        } else {
-            Toast.makeText(this, "Invalid Request/Response", Toast.LENGTH_SHORT).show();
-            finish();
-        }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                if (dialog.isShowing()) {
+                    dialog.dismiss();
+                }
+
+                // display an error to the user
+                showNetworkError(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do it again
+                        loadServices();
+                    }
+                });
+            }
+        };
     }
 
     // when activity result is received back
@@ -235,24 +242,12 @@ public class ReportIssueActivity extends AppCompatActivity implements
         }
     }
 
-    // when an error occurs
-    @Override
-    public void onFailure(Call<ResponseBody> call, Throwable t) {
-        // hide the dialog, releasing all the resources
-        Log.e(TAG, String.format("An error was: %s", t.getMessage()));
-        Toast.makeText(this, getString(R.string.msg_server_error), Toast.LENGTH_SHORT).show();
-        pDialog.dismiss();
-        // this is fatal error
-        finish();
-    }
-
     // when service is selected
     @Override
     public void onSelect(Open311Service open311Service) {
         // note the service id
         mServiceId = open311Service.id;
         // commit fragment
-        commitFragment(frags[FRAG_OPEN_ISSUE_TICKET]);
     }
 
 

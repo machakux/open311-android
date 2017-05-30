@@ -105,6 +105,10 @@
     <string name="text_quit">Report Incident and Quit</string>
     <string name="intro_title__get_notified">Get Notified&#8230;</string>
     <string name="intro_desc__get_ntofied">Receive update whenever the issues you report are being processed</string>
+    <string name="text_retry">Retry</string>
+    <string name="text_cancel">Cancel</string>
+    <string name="text_http_error">Http Error occurred. Do you want to report this incident?</string>
+    <string name="text_report">Yes, Report</string>
 
     <string-array name="duration_names">
         <item>Today</item>

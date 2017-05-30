@@ -54,8 +54,8 @@ public class ServiceRequestsFragment extends Fragment {
         rvServiceRequests = (RecyclerView)
                 view.findViewById(R.id.rv_ServiceRequests);
 
-        SparseArray<ServiceRequest> serviceRequests = getArguments()
-                .getSparseParcelableArray(SERVICE_REQUESTS);
+        List<ServiceRequest> serviceRequests = getArguments()
+                .getParcelableArrayList(SERVICE_REQUESTS);
         bindServiceRequests(serviceRequests);
     }
 
@@ -71,20 +71,15 @@ public class ServiceRequestsFragment extends Fragment {
     }
 
     private void bindServiceRequests(
-            SparseArray<ServiceRequest> serviceRequests) {
+            List<ServiceRequest> serviceRequests) {
 
         Log.d(TAG, "=======================SERVICE REQUESTS=========================");
         Log.d(TAG, String.valueOf(serviceRequests));
         Log.d(TAG, "======================/SERVICE REQUESTS=========================");
 
-        List<ServiceRequest> requests = new ArrayList<>(serviceRequests.size());
-
-        for (int i = 0; i < serviceRequests.size(); i++) {
-            requests.add(serviceRequests.get(i));
-        }
 
         ServiceRequestsAdapter adapter = new ServiceRequestsAdapter(
-                getActivity(), getString(R.string.text_issue_tickets), requests, mClickListener);
+                getActivity(), getString(R.string.text_issue_tickets), serviceRequests, mClickListener);
 
         rvServiceRequests.setAdapter(adapter);
         rvServiceRequests.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));

@@ -2,6 +2,7 @@ package com.github.codetanzania.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -28,7 +29,9 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.ResponseBody;
@@ -152,7 +155,7 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
         return args;
     }
 
-    private void displayServiceRequests(SparseArray<ServiceRequest> requests) {
+    private void displayServiceRequests(List<ServiceRequest> requests) {
         Bundle args = new Bundle();
 
         EmptyIssuesFragment frag = EmptyIssuesFragment.getNewInstance(null);
@@ -167,8 +170,8 @@ public class IssueTicketGroupsActivity extends AppCompatActivity
                     .disallowAddToBackStack()
                     .commitAllowingStateLoss();
         } else {
-            args.putSparseParcelableArray(
-                    ServiceRequestsFragment.SERVICE_REQUESTS, requests);
+            args.putParcelableArrayList(
+                    ServiceRequestsFragment.SERVICE_REQUESTS, (ArrayList<? extends Parcelable>) requests);
             ServiceRequestsFragment mServiceRequestsFrag = ServiceRequestsFragment.getNewInstance(args);
             lp.gravity = Gravity.TOP;
 

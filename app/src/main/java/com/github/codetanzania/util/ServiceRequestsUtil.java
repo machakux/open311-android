@@ -34,7 +34,7 @@ public class ServiceRequestsUtil {
                 Constants.Const.KEY_SHARED_PREFS, Context.MODE_PRIVATE);
     }
 
-    public static SparseArray<ServiceRequest> fromJson(String json) throws IOException {
+    public static ArrayList<ServiceRequest> fromJson(String json) throws IOException {
 
         Log.d(TAG, "Trying to convert " + json + "Inot something useful a system can understand.");
 
@@ -50,11 +50,11 @@ public class ServiceRequestsUtil {
         JsonArray   jsArray   = jsObject.getAsJsonArray("servicerequests");
         Log.d(TAG, gson.toJson(jsArray));
         ServiceRequest[] requests = gson.fromJson(jsArray, ServiceRequest[].class);
-        SparseArray<ServiceRequest> sparseArray = new SparseArray<>(requests.length);
+        ArrayList<ServiceRequest> list = new ArrayList<>(requests.length);
         for (int i = 0; i < requests.length; i++) {
-            sparseArray.append(i, requests[i]);
+            list.add(requests[i]);
         }
-        return sparseArray;
+        return list;
     }
 
     public static int daysBetween(Date date1, Date date2){
